@@ -1,0 +1,85 @@
+{
+  "title": "תוצאות משתתף",
+  "subtitle": "תצוגת תהליך מלא לפי anonId:",
+  "buttons": {
+    "back": "חזרה"
+  },
+  "states": {
+    "loading": "טוען נתונים...",
+    "empty": "לא נמצאו נתונים.",
+    "noData": "אין נתונים להצגה.",
+    "notExperimental": "המשתתף בקבוצת ביקורת — אין שיחה סוקרטית / רפלקציה."
+  },
+  "sections": {
+    "participant": "פרטי משתתף",
+    "trialInfo": "פרטי ניסוי",
+    "timeline": "זמנים",
+    "caselPre": "CASEL PRE",
+    "simulation": "סימולציה + ניתוח AI",
+    "socraticChat": "שיחה סוקרטית (ניסוי בלבד)",
+    "caselPost": "CASEL POST",
+    "ueq": "UEQ"
+  },
+  "labels": {
+    "ai": "AI",
+    "student": "סטודנט"
+  },
+  "fields": {
+    "email": "אימייל",
+    "anonId": "anonId",
+    "gender": "מגדר",
+    "ageRange": "טווח גיל",
+    "fieldOfStudy": "תחום לימוד",
+    "semester": "סמסטר",
+    "groupType": "קבוצה",
+    "group": "קבוצה",
+    "scenarioId": "סימולציה",
+    "assignedAt": "assignedAt",
+    "processStartedAt": "תחילת תהליך",
+    "processEndedAt": "סיום תהליך",
+    "processDuration": "משך תהליך",
+    "simStartedAt": "תחילת סימולציה",
+    "simEndedAt": "סיום סימולציה",
+    "simDuration": "משך סימולציה",
+    "chatStartedAt": "תחילת שיחה",
+    "chatEndedAt": "סיום שיחה",
+    "chatDuration": "משך שיחה",
+    "startedAt": "startedAt",
+    "endedAt": "endedAt",
+    "completedAt": "completedAt",
+    "lang": "שפה",
+    "answers": "תשובות",
+    "questionKey": "מפתח שאלה",
+    "value": "ערך",
+    "simAnswers": "תשובות סימולציה",
+    "aiAnalysis": "ניתוח AI",
+    "aiAnalysisJson": "ניתוח AI JSON",
+    "turns": "סה\"כ תורות",
+    "studentTurns": "תורות סטודנט",
+    "aiTurns": "תורות AI",
+    "messages": "הודעות",
+    "chatSummary": "סיכום שיחה",
+    "recommendations": "המלצות",
+    "finalReflection": "רפלקציה סופית",
+    "createdAt": "createdAt",
+    "ueqScores": "ציוני UEQ",
+    "pragmatic": "פרגמטי",
+    "hedonic": "הדוני",
+    "overall": "כולל",
+    "responses": "תגובות",
+    "item": "פריט"
+  },
+
+  "finalReflection": {
+
+    "title": "רפלקציה סופית",
+
+    "subtitle": "לפני שנסיים, נשמח לשמוע על החוויה שלך עם CASELy, המאמן הסוקרטי שלך",
+
+  "questions": {
+    "insight": "באיזה אופן השיחה הסוקרטית עזרה לך להרהר במחשבות או ברגשות שלך?",
+    "usefulness": "בסך הכל, האם את/ה מרגיש/ה שהשיחה עם Casely הייתה מועילה או משמעותית עבורך?"
+  }
+
+  }
+}
