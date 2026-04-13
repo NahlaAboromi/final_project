@@ -487,7 +487,8 @@ if (!startedByUser) {
           boxShadow: isDark
             ? '0 8px 40px rgba(0,0,0,.5), inset 0 1px 0 rgba(99,102,241,.12)'
             : '0 8px 40px rgba(99,102,241,.1), inset 0 1px 0 rgba(255,255,255,.9)',
-          padding: '28px 28px 22px',
+          padding: 'clamp(14px, 4vw, 28px)',
+
           color: C.primary,
         }}
       >
@@ -668,7 +669,8 @@ if (!startedByUser) {
             ref={listRef}
             className="sc-chat"
             style={{
-              height: 300,
+              height: 'clamp(200px, 40vh, 340px)',
+
               overflowY: 'auto',
               marginBottom: 14,
               borderRadius: 16,
@@ -725,8 +727,8 @@ if (!startedByUser) {
           {/* ── Input row ── */}
           {/* ✅ dir on root handles order; no manual flexDirection needed */}
           <div style={{
-            display: 'flex', gap: 10,
-            alignItems: 'stretch',
+display: 'flex', gap: 8, flexWrap: 'wrap',
+alignItems: 'stretch',
           }}>
             <input
               className="sc-input"
@@ -740,7 +742,7 @@ if (!startedByUser) {
                 if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (canSend) send(); }
               }}
               style={{
-                flex: 1, minWidth: 0,
+                flex: '1 1 100%', minWidth: 0,
                 padding: '12px 16px',
                 borderRadius: 14,
                 border: `1.5px solid ${C.inputBorder}`,
