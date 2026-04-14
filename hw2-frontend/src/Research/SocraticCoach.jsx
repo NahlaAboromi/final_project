@@ -69,6 +69,27 @@ const GLOBAL_STYLES = `
   .sc-chat::-webkit-scrollbar        { width: 5px; }
   .sc-chat::-webkit-scrollbar-track  { background: transparent; }
   .sc-chat::-webkit-scrollbar-thumb  { background: rgba(148,163,184,.35); border-radius: 99px; }
+    .sc-input-row {
+    display: flex;
+    gap: 10px;
+    align-items: stretch;
+  }
+
+  @media (max-width: 600px) {
+    .sc-input-row {
+      flex-wrap: wrap;
+    }
+
+    .sc-mobile-input {
+      flex-basis: 100%;
+      width: 100%;
+    }
+
+    .sc-mobile-btn {
+      flex: 1;
+      min-height: 44px;
+    }
+  }
 `;
 
 /* ─── Typing dots ─── */
@@ -487,8 +508,7 @@ if (!startedByUser) {
           boxShadow: isDark
             ? '0 8px 40px rgba(0,0,0,.5), inset 0 1px 0 rgba(99,102,241,.12)'
             : '0 8px 40px rgba(99,102,241,.1), inset 0 1px 0 rgba(255,255,255,.9)',
-          padding: 'clamp(14px, 4vw, 28px)',
-
+          padding: '28px 28px 22px',
           color: C.primary,
         }}
       >
@@ -669,8 +689,7 @@ if (!startedByUser) {
             ref={listRef}
             className="sc-chat"
             style={{
-              height: 'clamp(200px, 40vh, 340px)',
-
+              height: 300,
               overflowY: 'auto',
               marginBottom: 14,
               borderRadius: 16,
@@ -726,12 +745,9 @@ if (!startedByUser) {
 
           {/* ── Input row ── */}
           {/* ✅ dir on root handles order; no manual flexDirection needed */}
-          <div style={{
-display: 'flex', gap: 8, flexWrap: 'wrap',
-alignItems: 'stretch',
-          }}>
+<div className="sc-input-row">
             <input
-              className="sc-input"
+              className="sc-input sc-mobile-input"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               disabled={!canType}
@@ -742,7 +758,7 @@ alignItems: 'stretch',
                 if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (canSend) send(); }
               }}
               style={{
-                flex: '1 1 100%', minWidth: 0,
+                flex: '1 1 auto', minWidth: 0,
                 padding: '12px 16px',
                 borderRadius: 14,
                 border: `1.5px solid ${C.inputBorder}`,
@@ -760,7 +776,7 @@ alignItems: 'stretch',
 
             {/* Send */}
             <button
-              className="sc-send-btn"
+              className="sc-send-btn sc-mobile-btn"
               onClick={send}
               disabled={!canSend}
               style={{
@@ -779,7 +795,7 @@ alignItems: 'stretch',
 
             {/* Finish */}
             <button
-              className="sc-finish-btn"
+              className="sc-finish-btn sc-mobile-btn"
               onClick={() => { if (chatEnded) { doFinish(); } else { setShowFinishConfirm(true); } }}
               disabled={finished || finishing}
               aria-busy={finishing ? 'true' : 'false'}
