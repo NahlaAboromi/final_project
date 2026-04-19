@@ -143,7 +143,6 @@ const SEMESTER_VALUES = lang === "he"
     const email = (form.email || "").trim().toLowerCase();
     if (!email) errs.email = t("v_email");
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errs.email = t("v_emailFormat");
-    else if (!email.endsWith("@e.braude.ac.il")) errs.email = t("v_emailBraude");
 
     const finalField =
       form.fieldOfStudy === "other"
