@@ -24,7 +24,7 @@ Please summarize:
 - Which competencies are strongest and weakest.
 - Provide a short recommendation to the teacher.
 
-Respond in plain English, 3–5 sentences only.`
+Respond in the same language as the Situation and Question. If they are in Hebrew, respond in Hebrew. If they are in English, respond in English. Use 3–5 sentences only.`
     }
   ];
   // Call Claude service to generate the class insight
