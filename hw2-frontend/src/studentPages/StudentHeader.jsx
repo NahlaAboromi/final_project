@@ -324,6 +324,7 @@ const { t, dir, lang } = useI18n('studentHeaderNav');
                   .map((notification, index) => (
                     <div
                       key={index}
+                      dir={isRTL ? 'rtl' : 'ltr'}
                       onClick={() => {
                         if (!notification.read) markNotificationAsRead(notification._id);
                       }}
@@ -331,9 +332,9 @@ const { t, dir, lang } = useI18n('studentHeaderNav');
                         theme === 'dark'
                           ? 'bg-slate-700 hover:bg-slate-600 border-slate-600 text-gray-200'
                           : 'border-gray-100 hover:bg-gray-50 text-gray-800'
-                      } transition-colors flex items-start gap-3 text-left ${
-                        notification.read ? 'opacity-60' : ''
-                      }`}
+} transition-colors flex items-start gap-3 ${
+  isRTL ? 'text-right flex-row-reverse' : 'text-left flex-row'
+} ${notification.read ? 'opacity-60' : ''}`}
                     >
                       <div
                         className={`flex-shrink-0 mt-1 w-8 h-8 ${getTypeStyle(
