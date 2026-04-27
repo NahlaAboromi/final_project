@@ -162,14 +162,16 @@ const language = lang === 'he' ? 'he' : 'en';
       const selectedTopic = formData.useCustomTopic
         ? formData.customTopic.trim()
         : formData.topic;
-
+const selectedTopicLabel = formData.useCustomTopic
+  ? formData.customTopic.trim()
+  : t(`topics.${additionalTopics.find(opt => opt.value === formData.topic)?.dictKey}`);
       const classResponse = await fetch('/api/classes/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           classCode,
           className,
-          subject: selectedTopic,
+subject: selectedTopicLabel,
           situation,
           question,
           createdBy: user.id,
@@ -250,9 +252,8 @@ const titleHe = isCodeExists
     setLoadingAction('');
   };
 
-  const LoadingSpinner = () => (
-    <svg
-      className="animate-spin h-5 w-5 mr-2 text-white"
+const LoadingSpinner = () => (
+  <svg className="animate-spin h-5 w-5 text-white"
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
@@ -405,10 +406,10 @@ const titleHe = isCodeExists
             title={t('buttons.generate')}
           >
             {isLoading && loadingAction === 'generating' ? (
-              <>
-                <LoadingSpinner />
-                <span>{t('buttons.generating')}</span>
-              </>
+<span className="flex items-center justify-center gap-2" dir={isRTL ? 'rtl' : 'ltr'}>
+  <span>{t('buttons.generating')}</span>
+  <LoadingSpinner />
+</span>
             ) : (
               t('buttons.generate')
             )}
@@ -450,10 +451,10 @@ const titleHe = isCodeExists
             title={t('buttons.regenerate')}
           >
             {isLoading && loadingAction === 'generating' ? (
-              <>
-                <LoadingSpinner />
-                <span>{t('buttons.regenerating')}</span>
-              </>
+<span className="flex items-center justify-center gap-2" dir={isRTL ? 'rtl' : 'ltr'}>
+  <span>{t('buttons.regenerating')}</span>
+  <LoadingSpinner />
+</span>
             ) : (
               t('buttons.regenerate')
             )}
@@ -469,10 +470,10 @@ const titleHe = isCodeExists
             title={t('buttons.approveCreate')}
           >
             {isLoading && loadingAction === 'creating' ? (
-              <>
-                <LoadingSpinner />
-                <span>{t('buttons.creating')}</span>
-              </>
+<span className="flex items-center justify-center gap-2" dir={isRTL ? 'rtl' : 'ltr'}>
+  <span>{t('buttons.creating')}</span>
+  <LoadingSpinner />
+</span>
             ) : (
               t('buttons.approveCreate')
             )}
