@@ -21,6 +21,7 @@ const SimulationChart = ({ simulation, index, isDark }) => {
   // ---- language / rtl ----
   const { lang } = useContext(LanguageContext) || { lang: 'he' };
   const { t, dir, ready } = useI18n('simulationChart');
+  const isRTL = dir === 'rtl';
   if (!ready) return null;
 
   // tooltip - רספונסיבי
@@ -49,17 +50,17 @@ const SimulationChart = ({ simulation, index, isDark }) => {
   // data prep
   const simCompetencies = simulation.analysisResult?.competencies || simulation.analysisResult || {};
   const overall = simulation.analysisResult?.overallScore ?? null;
-
-  const simChartData = [
-    { key: 'selfAwareness', field: simCompetencies.selfAwareness?.score ?? 0 },
-    { key: 'selfManagement', field: simCompetencies.selfManagement?.score ?? 0 },
-    { key: 'socialAwareness', field: simCompetencies.socialAwareness?.score ?? 0 },
-    { key: 'relationshipSkills', field: simCompetencies.relationshipSkills?.score ?? 0 },
-    { key: 'responsibleDecisionMaking', field: simCompetencies.responsibleDecisionMaking?.score ?? 0 }
-  ].map(item => ({
-    name: t(item.key),
-    score: item.field
-  }));
+const simChartData = [
+  { key: 'selfAwareness', field: simCompetencies.selfAwareness?.score ?? 0 },
+  { key: 'selfManagement', field: simCompetencies.selfManagement?.score ?? 0 },
+  { key: 'socialAwareness', field: simCompetencies.socialAwareness?.score ?? 0 },
+  { key: 'relationshipSkills', field: simCompetencies.relationshipSkills?.score ?? 0 },
+  { key: 'responsibleDecisionMaking', field: simCompetencies.responsibleDecisionMaking?.score ?? 0 }
+].map(item => ({
+  name: t(item.key),
+  shortName: isRTL ? t(item.key).replace(' ', '\n') : t(item.key),
+  score: item.field
+}));
 
   return (
     <div className="mb-4 sm:mb-6" dir={dir} lang={lang}>
@@ -82,27 +83,27 @@ const SimulationChart = ({ simulation, index, isDark }) => {
       </div>
 
       {/* Chart - רספונסיבי */}
-      <div className="h-48 sm:h-36 w-full">
-        <ResponsiveContainer width="100%" height="100%">
+<div className="h-64 sm:h-56 w-full">        <ResponsiveContainer width="100%" height="100%">
           <BarChart 
             data={simChartData} 
-            margin={{ 
-              top: 5, 
-              right: 5, 
-              bottom: 5, 
-              left: -5 
-            }}
+margin={{ 
+  top: 5, 
+  right: 10, 
+  bottom: isRTL ? 35 : 20, 
+  left: 10 
+}}
           >
             <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
-            <XAxis
-              dataKey="name"
-              tick={{ fontSize: 8, fill: textColor }}
-              angle={-15}
-              textAnchor="end"
-              height={50}
-              axisLine={{ stroke: textColor }}
-              tickLine={{ stroke: textColor }}
-            />
+<XAxis
+  dataKey={isRTL ? "shortName" : "name"}
+  tick={{ fontSize: 10, fill: textColor }}
+  angle={0}
+  textAnchor="middle"
+  height={50}
+  interval={0}
+  axisLine={{ stroke: textColor }}
+  tickLine={{ stroke: textColor }}
+/>
             <YAxis
               domain={[0, 5]}
               tick={{ fontSize: 9, fill: textColor }}
