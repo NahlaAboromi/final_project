@@ -19,10 +19,11 @@ const StudentSimulation = () => {
 
   // ✅ i18n (שם חדש כדי לא להתנגש)
   const { t, dir, lang, ready } = useI18n('studentSimulationPage');
-
+const isRTL = dir === 'rtl';
   const [situation, setSituation] = useState('');
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(true);
   const [isLoadingToSubmit, setIsLoadingToSubmit] = useState(false);
 
@@ -71,7 +72,14 @@ const StudentSimulation = () => {
   console.log('timestamp:', new Date().toISOString());
 
   e.preventDefault();
+  setErrorMsg('');
 
+if (!answer.trim()) {
+  setErrorMsg(lang === 'he'
+    ? 'נא להזין תשובה לפני השליחה'
+    : 'Please write an answer before submitting');
+  return;
+}
   setIsLoadingToSubmit(true);
 
   try {
@@ -350,23 +358,37 @@ const StudentSimulation = () => {
                     rows="5"
                     placeholder={t('placeholder')}
                     value={answer}
-                    onChange={(e) => setAnswer(e.target.value)}
-                    required
+                    onChange={(e) => {
+  setAnswer(e.target.value);
+  if (e.target.value.trim()) {
+    setErrorMsg('');
+  }
+}}
                   />
-
+{errorMsg && (
+  <p className={`text-sm mb-2 text-red-500 ${dir === 'rtl' ? 'text-right' : 'text-left'}`}>
+    {errorMsg}
+  </p>
+)}
                   <button
                     type="submit"
                     className={`mt-6 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 w-full flex justify-center items-center ${isLoadingToSubmit ? 'opacity-70 cursor-not-allowed' : ''}`}
                     disabled={isLoadingToSubmit}
                   >
                     {isLoadingToSubmit ? (
-                      <>
-                        <svg className="animate-spin h-5 w-5 mr-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        <span>{t('submitting')}</span>
-                      </>
+  <span className="flex items-center justify-center gap-2">
+  <span>{t('submitting')}</span>
+
+  <svg
+    className="animate-spin h-5 w-5 text-white"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+  >
+    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+  </svg>
+</span>
                     ) : (
                       t('submit')
                     )}
