@@ -15,6 +15,7 @@ export const NotificationsProvider = ({ children }) => {
   // Get current user from context
   const { user } = useContext(UserContext);
   const userId = user?.id;
+const userRole = user?.role || user?.type || user?.userType || user?.accountType || '';
 const { lang } = useContext(LanguageContext);
   // State for notifications and unread count
   const [notifications, setNotifications] = useState([]);
@@ -23,17 +24,25 @@ const { lang } = useContext(LanguageContext);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-const [isFetching, setIsFetching] = useState(false);
-const [etag, setEtag] = useState(null);
 const fetchNotifications = async () => {
-  
-  if (!userId) return;
+  console.log("USER:", user);
+  console.log("userId:", userId);
+  console.log("userRole:", userRole);
+  console.log("lang:", lang);
+
+if (!userId) return;
   setIsLoading(true);
-    setError(null);
+  setError(null);
+
   try {
     const response = await fetch(`/api/notifications/teacher/${userId}?lang=${lang}`);
 
+    console.log("response status:", response.status);
+
     const data = await response.json();
+
+    console.log("notifications data:", data);
+
     setNotifications(data || []);
     setNotificationCount(data.filter(n => !n.read).length);
   } catch (err) {
@@ -82,8 +91,7 @@ const fetchNotifications = async () => {
 // Fetch notifications when user ID OR language changes
 useEffect(() => {
   fetchNotifications();
-}, [userId, lang]); // ⭐ הוספנו lang פה
-
+}, [userId, userRole, lang]);
 
   // Provide notifications, count, and actions to children via context
   return (
