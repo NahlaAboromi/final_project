@@ -185,7 +185,31 @@ const TeacherHeader = () => {
               right: 50%;
               transform: translateX(50%) scale(0.95) translateY(-10px);
             }
-            
+            .custom-notification-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-notification-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-notification-scroll::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+}
+
+.light-scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+}
+
+.dark-scroll::-webkit-scrollbar-thumb {
+  background: #64748b;
+}
+.dark-scroll::-webkit-scrollbar-track {
+  background: #1e293b; /* אותו צבע כמו הרקע הכהה */
+}
+.dark-scroll::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
             /* TABLET ומעלה */
             @media (min-width: 640px) {
               .notification-dropdown {
@@ -343,8 +367,7 @@ const TeacherHeader = () => {
               </button>
             </div>
 
-            <div className="max-h-80 overflow-y-auto">
-              {isLoading ? (
+<div className={`max-h-80 overflow-y-auto custom-notification-scroll ${theme === 'dark' ? 'dark-scroll' : 'light-scroll'}`}>              {isLoading ? (
                 <div className={`p-4 text-center ${theme === 'dark' ? 'text-gray-300' : 'text-gray-500'}`}>
                   {t('loadingNotifications', 'Loading notifications...')}
                 </div>
@@ -365,7 +388,7 @@ const TeacherHeader = () => {
                       theme === 'dark'
                         ? 'bg-slate-700 hover:bg-slate-600 border-slate-600 text-gray-200'
                         : 'border-gray-100 hover:bg-gray-50 text-gray-800'
-                    } transition-colors text-left ${notification.read ? 'opacity-60' : ''}`}
+                    } transition-colors ${isRTL ? 'text-right' : 'text-left'} ${notification.read ? 'opacity-60' : ''}`}
                   >
                     <div className={`icon-container flex-shrink-0 mt-1 ${getTypeStyle(notification.type)} rounded-full flex items-center justify-center`}>
                       {getTypeIcon(notification.type)}
