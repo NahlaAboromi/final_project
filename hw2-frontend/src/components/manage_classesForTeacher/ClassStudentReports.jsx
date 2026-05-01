@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import TeacherHeader from '../../layout/TeacherHeader';
 import Footer from '../../layout/Footer';
-import { ThemeProvider, ThemeContext } from '../../DarkLightMood/ThemeContext';
+import { ThemeContext } from '../../DarkLightMood/ThemeContext';
 import StudentReportCard from './StudentReportCard';
 import { UserContext } from '../../context/UserContext';
 import AIChat from '../../AI/AIChat';
@@ -133,12 +133,5 @@ const StudentReportsContent = () => {
     </div>
   );
 };
-
-/** Wrapper */
-const ClassStudentReports = () => (
-  <ThemeProvider>
-    <StudentReportsContent />
-  </ThemeProvider>
-);
-
+const ClassStudentReports = () => <StudentReportsContent />;
 export default ClassStudentReports;

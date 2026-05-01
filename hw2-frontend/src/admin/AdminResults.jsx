@@ -14,7 +14,7 @@ import SimulationSection from "./SimulationSection";
 import SocraticChatSection from "./SocraticChatSection";
 import UeqSection from "./UeqSection";
 
-import { ThemeProvider, ThemeContext } from "../DarkLightMood/ThemeContext";
+import { ThemeContext } from "../DarkLightMood/ThemeContext";
 import { LanguageContext } from "../context/LanguageContext";
 import { useI18n } from "../utils/i18n";
 
@@ -490,10 +490,6 @@ const AdminResultsContent = () => {
   );
 };
 
-const AdminResults = () => (
-  <ThemeProvider>
-    <AdminResultsContent />
-  </ThemeProvider>
-);
+const AdminResults = () => <AdminResultsContent />;
 
 export default AdminResults;

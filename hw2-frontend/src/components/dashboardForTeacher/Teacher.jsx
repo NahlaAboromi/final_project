@@ -5,7 +5,6 @@ import Footer from "../../layout/Footer";
 import DashboardOverview from "./DashboardOverview";
 import QuickActions from "./QuickActions";
 import RecentActivity from "../RecentActivity";
-import { ThemeProvider } from '../../DarkLightMood/ThemeContext';
 import { ThemeContext } from '../../DarkLightMood/ThemeContext';
 import { UserContext } from '../../context/UserContext';
 import AIChat from '../../AI/AIChat';
@@ -80,13 +79,6 @@ const TeacherContent = () => {
   );
 };
 
-const Teacher = () => {
-  // Wrap the dashboard with ThemeProvider to enable theme context
-  return (
-    <ThemeProvider>
-      <TeacherContent />
-    </ThemeProvider>
-  );
-};
+const Teacher = () => <TeacherContent />;
 
 export default Teacher;

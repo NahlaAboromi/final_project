@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import TeacherHeader from '../../layout/TeacherHeader';
 import Footer from '../../layout/Footer';
-import { ThemeProvider, ThemeContext } from '../../DarkLightMood/ThemeContext';
+import { ThemeContext } from '../../DarkLightMood/ThemeContext';
 import { UserContext } from '../../context/UserContext';
 import AIChat from '../../AI/AIChat';
 import StudentCard from '../../components/StudentProgressForTeacher/StudentCard';
@@ -119,12 +119,6 @@ const AllReportsContent = () => {
   );
 };
 
-const AllReports = () => {
-  return (
-    <ThemeProvider>
-      <AllReportsContent />
-    </ThemeProvider>
-  );
-};
+const AllReports = () => <AllReportsContent />;
 
 export default AllReports;

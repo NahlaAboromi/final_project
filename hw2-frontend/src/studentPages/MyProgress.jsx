@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState, useRef } from 'react';
 import StudentHeader from './StudentHeader';
 import Footer from '../layout/Footer';
 import { UserContext } from '../context/UserContext';
-import { ThemeProvider, ThemeContext } from '../DarkLightMood/ThemeContext';
+import { ThemeContext } from '../DarkLightMood/ThemeContext';
 import {
   LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
 } from 'recharts';
@@ -30,11 +30,17 @@ function SimulationProgressChart({ submissions }) {
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={chartData}>
             <CartesianGrid stroke="#cbd5e1" strokeDasharray="4 4" strokeWidth={0.8} />
-            <XAxis
-              dataKey="attempt"
-              label={{ value: t('attemptNumber', 'Attempt Number'), position: "insideBottom", offset: -5, fill: "#6b7280" }}
-              tick={{ fill: "#6b7280" }}
-            />
+<XAxis
+  dataKey="attempt"
+  height={45}
+  label={{
+    value: t('attemptNumber', 'Attempt Number'),
+    position: "insideBottom",
+    offset: -2,
+    fill: "#6b7280"
+  }}
+  tick={{ fill: "#6b7280" }}
+/>
 <YAxis
   domain={[0, 5]}
   label={{ value: t('score', 'Score'), angle: -90, position: "insideLeft", fill: "#6b7280" }}
@@ -658,12 +664,6 @@ className={`absolute top-4 ${dir === 'rtl' ? 'left-6' : 'right-6'} text-sm bg-sl
   );
 };
 
-const ViewMyProgress = () => {
-  return (
-    <ThemeProvider>
-      <MyProgress />
-    </ThemeProvider>
-  );
-};
+const ViewMyProgress = () => <MyProgress />;
 
 export default ViewMyProgress;

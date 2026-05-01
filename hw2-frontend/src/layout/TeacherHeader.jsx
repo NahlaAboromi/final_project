@@ -352,22 +352,30 @@ const TeacherHeader = () => {
           </div>
 
           <div
-            className={`notification-dropdown ${theme === 'dark' ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-200 text-gray-800'}`}
+            className={`notification-dropdown ${theme === 'dark' ? 'bg-slate-800  border-slate-600 text-white' : 'bg-white border-gray-200 text-gray-800'}`}
           >
             <div className={`px-3 py-2 sm:px-4 sm:py-3 ${theme === 'dark' ? 'bg-slate-800 border-slate-600 text-white' : 'bg-slate-100 border-gray-200 text-gray-800'} border-b flex justify-between items-center`}>
               <h3 className="font-bold text-xs sm:text-sm" dir={isRTL ? 'rtl' : 'ltr'}>
                 {t('notifications', 'Notifications')} <span dir="ltr">({notificationCount})</span>
               </h3>
 
-              <button
-                onClick={markAllAsRead}
-                className={`text-xs ${theme === 'dark' ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-800'} font-medium whitespace-nowrap`}
-              >
+<button
+  onClick={markAllAsRead}
+  className={`text-xs px-3 py-1 rounded-md font-medium whitespace-nowrap transition ${
+    theme === 'dark'
+      ? 'bg-slate-600 text-white hover:bg-slate-500'
+      : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+  }`}
+>
                 {t('markAllAsRead', 'Mark all as read')}
               </button>
             </div>
 
-<div className={`max-h-80 overflow-y-auto custom-notification-scroll ${theme === 'dark' ? 'dark-scroll' : 'light-scroll'}`}>              {isLoading ? (
+<div className={`max-h-80 overflow-y-auto custom-notification-scroll ${
+  theme === 'dark'
+    ? 'dark-scroll bg-slate-900'
+    : 'light-scroll bg-white'
+}`}>            {isLoading ? (
                 <div className={`p-4 text-center ${theme === 'dark' ? 'text-gray-300' : 'text-gray-500'}`}>
                   {t('loadingNotifications', 'Loading notifications...')}
                 </div>
@@ -385,9 +393,9 @@ const TeacherHeader = () => {
                       if (!notification.read) markNotificationAsRead(notification._id);
                     }}
                     className={`notification-item border-b cursor-pointer ${
-                      theme === 'dark'
-                        ? 'bg-slate-700 hover:bg-slate-600 border-slate-600 text-gray-200'
-                        : 'border-gray-100 hover:bg-gray-50 text-gray-800'
+theme === 'dark'
+  ? 'bg-slate-800 hover:bg-slate-700 border-slate-700 text-gray-200'
+  : 'border-gray-100 hover:bg-gray-50 text-gray-800'
                     } transition-colors ${isRTL ? 'text-right' : 'text-left'} ${notification.read ? 'opacity-60' : ''}`}
                   >
                     <div className={`icon-container flex-shrink-0 mt-1 ${getTypeStyle(notification.type)} rounded-full flex items-center justify-center`}>

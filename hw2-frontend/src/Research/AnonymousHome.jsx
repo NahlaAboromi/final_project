@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import AnonymousHeader from './AnonymousHeader';
 import Footer from '../layout/Footer';
 import ShowClasses from '../studentPages/ShowClasses';
-import { ThemeProvider, ThemeContext } from '../DarkLightMood/ThemeContext';
+import { ThemeContext } from '../DarkLightMood/ThemeContext';
 import { useAnonymousStudent as useStudent } from "../context/AnonymousStudentContext";
 import StudentRecentActivities from '../studentPages/StudentRecentActivities';
 import StudentAIChat from '../AI/StudentAIChat';
@@ -62,11 +62,5 @@ const AnonymousHomeContent = () => {
     </div>
   );
 };
-
-const AnonymousHome = () => (
-  <ThemeProvider>
-    <AnonymousHomeContent />
-  </ThemeProvider>
-);
-
+const AnonymousHome = () => <AnonymousHomeContent />;
 export default AnonymousHome;

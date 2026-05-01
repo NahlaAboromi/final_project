@@ -7,8 +7,7 @@ import Button from "../Button";
 import Alert from "../Alert";
 import Footer from "../../layout/Footer";
 import SharedHeader from "../../layoutForEducatorsAndStudents/SharedHeader";
-import { ThemeContext, ThemeProvider } from "../../DarkLightMood/ThemeContext";
-
+import { ThemeContext } from "../../DarkLightMood/ThemeContext";
 import { useI18n } from "../../utils/i18n";
 import { LanguageContext } from "../../context/LanguageContext";
 
@@ -147,12 +146,5 @@ const ResetPasswordContent = () => {
     </div>
   );
 };
-
-/** Wrapper */
-const ResetPassword = () => (
-  <ThemeProvider>
-    <ResetPasswordContent />
-  </ThemeProvider>
-);
-
+const ResetPassword = () => <ResetPasswordContent />;
 export default ResetPassword;

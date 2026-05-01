@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { ThemeProvider, ThemeContext } from "../../DarkLightMood/ThemeContext";
+import { ThemeContext } from "../../DarkLightMood/ThemeContext";
 import { UserContext } from "../../context/UserContext";
 import SharedHeader from "../../layoutForEducatorsAndStudents/SharedHeader";
 import Footer from "../../layout/Footer";
@@ -162,13 +162,5 @@ const LoginContent = () => {
   );
 };
 
-/**
- * Wrapper with ThemeProvider
- */
-const Login = () => (
-  <ThemeProvider>
-    <LoginContent />
-  </ThemeProvider>
-);
-
+const Login = () => <LoginContent />;
 export default Login;

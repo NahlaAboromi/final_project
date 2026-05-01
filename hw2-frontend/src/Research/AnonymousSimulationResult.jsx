@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState, useMemo } from 'react';
 import AnonymousHeader from './AnonymousHeader';
 import Footer from '../layout/Footer';
-import { ThemeContext, ThemeProvider } from '../DarkLightMood/ThemeContext';
+import { ThemeContext } from '../DarkLightMood/ThemeContext';
 import { useAnonymousStudent as useStudent } from '../context/AnonymousStudentContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 import AnswerCard from '../studentPages/AnswerCard';
@@ -510,11 +510,6 @@ document.getElementById(showSocratic ? 'socratic-section' : 'post-questionnaire'
   );
   
 }
-
 export default function AnonymousSimulationResult() {
-  return (
-    <ThemeProvider>
-      <AnonymousSimulationResultInner />
-    </ThemeProvider>
-  );
+  return <AnonymousSimulationResultInner />;
 }

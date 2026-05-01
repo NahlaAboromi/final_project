@@ -388,13 +388,7 @@ const RegisterPage = () => {
 };
 
 const RegisterWrapper = () => {
-  return (
-    <ThemeProvider>
-      <UserProvider>
-        <RegisterPage />
-      </UserProvider>
-    </ThemeProvider>
-  );
+  return <RegisterPage />;
 };
 
 export default RegisterWrapper;

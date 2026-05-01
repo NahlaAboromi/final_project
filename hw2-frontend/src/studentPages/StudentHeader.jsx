@@ -261,6 +261,39 @@ const visibleNotificationCount =
               0%, 100% { transform: scale(1); }
               50% { transform: scale(1.15); }
             }
+            .notification-list {
+  scrollbar-width: thin;
+}
+
+.notification-list.dark-scrollbar {
+  scrollbar-color: #64748b #1e293b;
+}
+
+.notification-list.light-scrollbar {
+  scrollbar-color: #cbd5e1 #f1f5f9;
+}
+
+.notification-list::-webkit-scrollbar {
+  width: 10px;
+}
+
+.notification-list.dark-scrollbar::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+
+.notification-list.dark-scrollbar::-webkit-scrollbar-thumb {
+  background: #64748b;
+  border-radius: 999px;
+}
+
+.notification-list.light-scrollbar::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.notification-list.light-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 999px;
+}
           `}</style>
 
           <div className="bell-icon">
@@ -310,7 +343,11 @@ const visibleNotificationCount =
               </button>
             </div>
 
-            <div className="max-h-80 overflow-y-auto">
+            <div
+  className={`max-h-80 overflow-y-auto notification-list ${
+    theme === 'dark' ? 'dark-scrollbar' : 'light-scrollbar'
+  }`}
+>
               {isLoading ? (
                 <div className={'p-4 text-center dark:text-gray-300 text-gray-500'}>
                   {t('loadingNotifications', 'Loading notifications...')}

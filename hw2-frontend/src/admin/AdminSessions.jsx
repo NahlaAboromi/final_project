@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AdminHeader from "./AdminHeader";
 import Footer from "../layout/Footer";
-import { ThemeProvider, ThemeContext } from "../DarkLightMood/ThemeContext";
+import { ThemeContext } from "../DarkLightMood/ThemeContext";
 import { LanguageContext } from "../context/LanguageContext";
 import { useI18n } from "../utils/i18n";
 
@@ -585,10 +585,5 @@ const confirmDelete = async () => {
   );
 };
 
-const AdminSessions = () => (
-  <ThemeProvider>
-    <AdminSessionsContent />
-  </ThemeProvider>
-);
-
+const AdminSessions = () => <AdminSessionsContent />;
 export default AdminSessions;

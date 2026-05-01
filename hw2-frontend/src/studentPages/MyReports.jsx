@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import StudentHeader from './StudentHeader';
 import Footer from '../layout/Footer';
 import { UserContext } from '../context/UserContext';
-import { ThemeProvider, ThemeContext } from '../DarkLightMood/ThemeContext';
+import { ThemeContext } from '../DarkLightMood/ThemeContext';
 import StudentSimulationBox from './StudentSimulationBox';
 import AnswerCard from './AnswerCard';
 import { useLocation } from 'react-router-dom';
@@ -51,13 +51,18 @@ const ClassDetailsContent = () => {
 
     return `${year}-${month}-${day}`;
   };
-
+const dateInputStyle = `
+  .dark-date-input {
+    color-scheme: dark;
+  }
+`;
   return (
     <div
       dir={dir}
       lang={lang}
       className={`flex flex-col min-h-screen w-screen ${isDark ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-800'}`}
     >
+    <style>{dateInputStyle}</style>
       {/* Header */}
       <div className="px-4 mt-4">
         <StudentHeader />
@@ -93,18 +98,21 @@ const ClassDetailsContent = () => {
 
               {/* Date input for filtering */}
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-4">
-                <label htmlFor="searchDate" className="font-medium">
-                  {t('filterByDate', 'Filter by submission date:')}
-                </label>
+<label htmlFor="searchDate" className="font-medium">
+  {lang === 'he'
+    ? 'סינון לפי תאריך הגשה (יום/חודש/שנה):'
+    : 'Filter by submission date (MM/DD/YYYY):'}
+</label>
 
-                <input
-                  type="date"
-                  id="searchDate"
-                  value={searchDate}
-                  onChange={(e) => setSearchDate(e.target.value)}
-                  className={`${isDark ? 'bg-slate-800 text-white border-slate-600' : 'bg-slate-100 text-slate-800 border-slate-300'} border p-2 rounded-md`}
-                />
-
+<input
+  type="date"
+  id="searchDate"
+  value={searchDate}
+  onChange={(e) => setSearchDate(e.target.value)}
+  dir="ltr"
+  lang="en-GB"
+  className={`${isDark ? 'bg-slate-800 text-white border-slate-600 dark-date-input' : 'bg-slate-100 text-slate-800 border-slate-300'} border p-2 rounded-md text-left`}
+/>
                 {/* Clear date filter button */}
                 {searchDate && (
                   <button
@@ -162,13 +170,5 @@ const ClassDetailsContent = () => {
   );
 };
 
-const ViewClassDetails = () => {
-  // Wrap main content with theme provider
-  return (
-    <ThemeProvider>
-      <ClassDetailsContent />
-    </ThemeProvider>
-  );
-};
-
+const ViewClassDetails = () => <ClassDetailsContent />;
 export default ViewClassDetails;

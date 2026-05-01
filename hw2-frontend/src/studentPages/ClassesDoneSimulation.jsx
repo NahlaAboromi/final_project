@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { ThemeProvider, ThemeContext } from "../DarkLightMood/ThemeContext";
+import { ThemeContext } from "../DarkLightMood/ThemeContext";
 import { UserContext } from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
 import StudentHeader from './StudentHeader';
@@ -183,11 +183,6 @@ const ClassManagerContent = () => {
     </div>
   );
 };
-
-const ClassManager = () => (
-  <ThemeProvider>
-    <ClassManagerContent />
-  </ThemeProvider>
-);
+const ClassManager = () => <ClassManagerContent />;
 
 export default ClassManager;

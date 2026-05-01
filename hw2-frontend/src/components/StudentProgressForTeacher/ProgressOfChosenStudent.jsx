@@ -5,7 +5,7 @@ import { exportElementAsPDF } from './pdfExporter';
 
 import TeacherHeader from '../../layout/TeacherHeader';
 import Footer from '../../layout/Footer';
-import { ThemeProvider, ThemeContext } from '../../DarkLightMood/ThemeContext';
+import { ThemeContext } from '../../DarkLightMood/ThemeContext';
 import { UserContext } from '../../context/UserContext';
 import AIChat from '../../AI/AIChat';
 
@@ -162,10 +162,6 @@ const ProgressOfChosenStudentContent = () => {
   );
 };
 
-const ProgressOfChosenStudent = () => (
-  <ThemeProvider>
-    <ProgressOfChosenStudentContent />
-  </ThemeProvider>
-);
+const ProgressOfChosenStudent = () => <ProgressOfChosenStudentContent />;
 
 export default ProgressOfChosenStudent;

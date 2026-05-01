@@ -1,6 +1,6 @@
 //C:\Users\n0502\OneDrive\שולחן העבודה\עבודה על הערות מגי יום שלישי רמדאן\final_project-main (2)\final_project-main\hw2-frontend\src\studentPages\ShowClasses.jsx
 import React, { useState, useEffect, useContext } from 'react';
-import { ThemeProvider, ThemeContext } from "../DarkLightMood/ThemeContext";
+import { ThemeContext } from "../DarkLightMood/ThemeContext";
 import { UserContext } from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
 import { useI18n } from '../utils/i18n';
@@ -203,11 +203,5 @@ const ClassManagerContent = () => {
   );
 };
 
-const ClassManager = () => (
-  // Wrap component with ThemeProvider to provide theme context
-  <ThemeProvider>
-    <ClassManagerContent />
-  </ThemeProvider>
-);
-
+const ClassManager = () => <ClassManagerContent />;
 export default ClassManager;

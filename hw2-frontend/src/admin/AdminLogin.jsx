@@ -1,8 +1,7 @@
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { ThemeProvider, ThemeContext } from "../DarkLightMood/ThemeContext";
-import FormInput from "../components/FormInput";
+import { ThemeContext } from "../DarkLightMood/ThemeContext";import FormInput from "../components/FormInput";
 import Button from "../components/Button";
 import Alert from "../components/Alert";
 import Footer from "../layout/Footer";
@@ -109,10 +108,6 @@ const AdminLoginContent = () => {
   );
 };
 
-const AdminLogin = () => (
-  <ThemeProvider>
-    <AdminLoginContent />
-  </ThemeProvider>
-);
+const AdminLogin = () => <AdminLoginContent />;
 
 export default AdminLogin;

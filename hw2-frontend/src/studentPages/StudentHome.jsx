@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import StudentHeader from "./StudentHeader";
 import Footer from "../layout/Footer";
 import ShowClasses from "./ShowClasses";
-import { ThemeProvider, ThemeContext } from '../DarkLightMood/ThemeContext';
+import { ThemeContext } from '../DarkLightMood/ThemeContext';
 import { UserContext } from '../context/UserContext';
 import StudentRecentActivities from './StudentRecentActivities';
 import StudentAIChat from '../AI/StudentAIChat';
@@ -51,12 +51,5 @@ const StudentContent = () => {
   );
 };
 
-const Student = () => {
-  return (
-    <ThemeProvider>
-      <StudentContent />
-    </ThemeProvider>
-  );
-};
-
+const Student = () => <StudentContent />;
 export default Student;

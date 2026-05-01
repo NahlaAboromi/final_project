@@ -3,7 +3,7 @@ import React, { useContext, useState } from 'react';
 import ClassForm from '../ClassForm';
 import TeacherHeader from '../../layout/TeacherHeader';
 import Footer from '../../layout/Footer';
-import { ThemeProvider, ThemeContext } from '../../DarkLightMood/ThemeContext';
+import { ThemeContext } from '../../DarkLightMood/ThemeContext';
 import { UserContext } from '../../context/UserContext';
 import AIChat from '../../AI/AIChat';
 
@@ -108,13 +108,5 @@ const CreateClassContent = () => {
   );
 };
 
-const Create_New_Class = () => {
-  // Wrap the content with ThemeProvider to enable theme context
-  return (
-    <ThemeProvider>
-      <CreateClassContent />
-    </ThemeProvider>
-  );
-};
-
+const Create_New_Class = () => <CreateClassContent />;
 export default Create_New_Class;

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import TeacherHeader from '../../layout/TeacherHeader';
 import Footer from '../../layout/Footer';
-import { ThemeProvider, ThemeContext } from '../../DarkLightMood/ThemeContext';
+import {ThemeContext } from '../../DarkLightMood/ThemeContext';
 import SimulationBox from './SimulationBox';
 import StudentAnswerCard from './StudentAnswerCard';
 import { UserContext } from '../../context/UserContext';
@@ -187,13 +187,6 @@ const ClassDetailsContent = () => {
     </div>
   );
 };
-
-const ViewClassDetails = () => {
-  return (
-    <ThemeProvider>
-      <ClassDetailsContent />
-    </ThemeProvider>
-  );
-};
+const ViewClassDetails = () => <ClassDetailsContent />;
 
 export default ViewClassDetails;

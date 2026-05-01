@@ -75,14 +75,18 @@ date: dt
         </div>
 
         <div className={`${dir === 'rtl' ? 'text-right sm:text-left' : 'text-left sm:text-right'} text-xs sm:text-sm`}>
-          <div className="text-xs sm:text-sm font-semibold text-blue-600 mb-1">
+          <div className={`text-xs sm:text-sm font-semibold mb-1 ${isDark ? 'text-blue-300' : 'text-blue-600'}`}>
             {lang === 'he' ? 'ציון ראשון ← אחרון' : t('firstToLast')}
           </div>
-          <div className="text-base sm:text-lg text-blue-700 font-bold">
+         <div className={`text-base sm:text-lg font-bold ${isDark ? 'text-blue-300' : 'text-blue-700'}`}>
             {firstLastLine}
           </div>
           {attempts.length > 1 && improvement !== 0 && (
-            <div className={`text-xs sm:text-sm mt-1 ${improvement > 0 ? 'text-green-600' : 'text-red-600'}`}>
+            <div className={`text-xs sm:text-sm mt-1 ${
+  improvement > 0
+    ? (isDark ? 'text-green-300' : 'text-green-600')
+    : (isDark ? 'text-red-300' : 'text-red-600')
+}`}>
               {lang === 'he'
   ? `${LRM}${improvement > 0 ? '+' : ''}${toFixedSafe(improvement, 1)}${LRM} ${t('improvement')}`
   : `${improvement > 0 ? '+' : ''}${toFixedSafe(improvement, 1)} ${t('improvement')}`
@@ -104,20 +108,36 @@ date: dt
               <CartesianGrid strokeDasharray="3 3" />
 <XAxis
   dataKey="date"
-  tick={{ fontSize: 13 }}
+  tick={{
+    fontSize: 13,
+    fill: isDark ? '#cbd5f5' : '#475569'
+  }}
   dy={10}
-/>              <YAxis
+/>           <YAxis
   domain={[0, 5]}
-  tick={{ fontSize: 11 }}
+  tick={{
+    fontSize: 11,
+    fill: isDark ? '#cbd5f5' : '#475569'
+  }}
   dx={-10}
-/><YAxis domain={[0, 5]} tick={{ fontSize: 11 }} />
+/>
 <Tooltip
-  labelStyle={{ direction: 'ltr', textAlign: 'left' }}
+  contentStyle={{
+    backgroundColor: isDark ? '#1e293b' : '#ffffff',
+    border: 'none',
+    borderRadius: '8px',
+    color: isDark ? '#fff' : '#000'
+  }}
+  labelStyle={{
+    direction: 'ltr',
+    textAlign: 'left',
+    color: isDark ? '#cbd5f5' : '#334155'
+  }}
   formatter={(value) => [
     `${LRM}${toFixedSafe(value, 1)}${LRM}`,
     lang === 'he' ? 'ציון' : 'score'
   ]}
-/>             <Line
+/>        <Line
                 type="monotone"
                 dataKey="score"
                 stroke="#2563eb"

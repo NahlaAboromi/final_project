@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
-import { ThemeContext, ThemeProvider } from "../../DarkLightMood/ThemeContext";
+import { ThemeContext } from "../../DarkLightMood/ThemeContext";
 import FormInput from "../FormInput";
 import Button from "../Button";
 import Alert from "../Alert";
@@ -149,13 +149,6 @@ const ForgotPasswordContent = () => {
   );
 };
 
-/**
- * Wrapper
- */
-const ForgotPassword = () => (
-  <ThemeProvider>
-    <ForgotPasswordContent />
-  </ThemeProvider>
-);
+const ForgotPassword = () => <ForgotPasswordContent />;
 
 export default ForgotPassword;

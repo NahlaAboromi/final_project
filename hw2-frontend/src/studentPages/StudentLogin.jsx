@@ -1,7 +1,7 @@
 // src/studentPages/StudentLogin.jsx (או איפה שהקובץ אצלך)
 import React, { useContext, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { ThemeProvider, ThemeContext } from "../DarkLightMood/ThemeContext";
+import { ThemeContext } from "../DarkLightMood/ThemeContext";
 import { UserContext } from "../context/UserContext";
 import FormInput from "../components/FormInput";
 import Button from "../components/Button";
@@ -145,11 +145,7 @@ const LoginPage = () => {
 };
 
 const StudentLoginPage = () => {
-  return (
-    <ThemeProvider>
-      <LoginPage />
-    </ThemeProvider>
-  );
+  return <LoginPage />;
 };
 
 export default StudentLoginPage;

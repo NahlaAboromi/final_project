@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import ClassCard from './ClassCard';
 import TeacherHeader from "../../layout/TeacherHeader";
 import Footer from "../../layout/Footer";
-import { ThemeProvider, ThemeContext } from "../../DarkLightMood/ThemeContext";
+import { ThemeContext } from "../../DarkLightMood/ThemeContext";
 import { UserContext } from '../../context/UserContext';
 import AIChat from '../../AI/AIChat';
 
@@ -200,10 +200,5 @@ className={`h-4 w-4 sm:h-5 sm:w-5 absolute ${lang === 'he' ? 'left-3' : 'right-3
   );
 };
 
-const ClassManager = () => (
-  <ThemeProvider>
-    <ClassManagerContent />
-  </ThemeProvider>
-);
-
+const ClassManager = () => <ClassManagerContent />;
 export default ClassManager;

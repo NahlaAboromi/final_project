@@ -4,8 +4,7 @@ import Footer from "../layout/Footer";
 import AdminDashboardOverview from "./AdminDashboardOverview";
 import AdminQuickActions from "./AdminQuickActions";
 
-import { ThemeProvider, ThemeContext } from "../DarkLightMood/ThemeContext";
-import { LanguageContext } from "../context/LanguageContext";
+import { ThemeContext } from "../DarkLightMood/ThemeContext";import { LanguageContext } from "../context/LanguageContext";
 import { useI18n } from "../utils/i18n";
 
 const AdminHomeContent = () => {
@@ -62,10 +61,6 @@ const AdminHomeContent = () => {
   );
 };
 
-const AdminHome = () => (
-  <ThemeProvider>
-    <AdminHomeContent />
-  </ThemeProvider>
-);
+const AdminHome = () => <AdminHomeContent />;
 
 export default AdminHome;

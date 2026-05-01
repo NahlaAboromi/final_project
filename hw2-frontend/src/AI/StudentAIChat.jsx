@@ -6,7 +6,7 @@ import { useI18n } from '../utils/i18n';
 const AIChat = ({ studentId, studentName }) => {
   const [showBox, setShowBox] = useState(false);
   const [input, setInput] = useState('');
-
+const [showHelp, setShowHelp] = useState(false);
   const { theme } = useContext(ThemeContext);
   const isDark = theme === 'dark';
 
@@ -141,6 +141,39 @@ const AIChat = ({ studentId, studentName }) => {
           0%, 80%, 100% { transform: translateY(0); }
           40% { transform: translateY(-6px); }
         }
+        .chat-scrollbar {
+  scrollbar-width: thin;
+}
+
+.chat-scrollbar.dark-scrollbar {
+  scrollbar-color: #64748b #1e293b;
+}
+
+.chat-scrollbar.light-scrollbar {
+  scrollbar-color: #cbd5e1 #f8fafc;
+}
+
+.chat-scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+
+.chat-scrollbar.dark-scrollbar::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+
+.chat-scrollbar.dark-scrollbar::-webkit-scrollbar-thumb {
+  background: #64748b;
+  border-radius: 999px;
+}
+
+.chat-scrollbar.light-scrollbar::-webkit-scrollbar-track {
+  background: #f8fafc;
+}
+
+.chat-scrollbar.light-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 999px;
+}
       `}</style>
 
       {/* Floating button */}
@@ -169,7 +202,7 @@ const AIChat = ({ studentId, studentName }) => {
 
               <button
                 title={t('helpTooltip')}
-                onClick={() => alert(t('helpText'))}
+                onClick={() => setShowHelp(true)}
                 className="bg-gray-200 text-blue-700 dark:bg-gray-700 dark:text-white px-3 py-1 rounded text-sm hover:bg-blue-400 disabled:opacity-50"
               >
                 ?
@@ -185,10 +218,37 @@ const AIChat = ({ studentId, studentName }) => {
               &times;
             </button>
           </div>
-
+{showHelp && (
+  <div
+    className={`mx-4 mt-3 p-3 rounded-lg border text-sm leading-6 ${
+      isDark
+        ? 'bg-slate-700 border-slate-600 text-white'
+        : 'bg-blue-50 border-blue-200 text-slate-800'
+    }`}
+  >
+    <div className="flex justify-between items-start gap-3">
+      <p>{t('helpText')}</p>
+<button
+  onClick={() => setShowHelp(false)}
+  className={`w-8 h-8 rounded-md flex items-center justify-center font-bold text-lg leading-none ${
+    isDark
+      ? 'bg-slate-600 text-white hover:bg-slate-500 hover:text-red-300'
+      : 'bg-white text-slate-700 hover:bg-slate-100 hover:text-red-600'
+  }`}
+  aria-label={t('closeAria')}
+>
+  ×
+</button>
+    </div>
+  </div>
+)}
           {/* Messages */}
-          <div ref={chatRef} className="flex-1 overflow-y-auto px-4 py-2 space-y-2">
-            {messages.map((msg, index) => {
+<div
+  ref={chatRef}
+  className={`flex-1 overflow-y-auto px-4 py-2 space-y-2 chat-scrollbar ${
+    isDark ? 'dark-scrollbar' : 'light-scrollbar'
+  }`}
+>            {messages.map((msg, index) => {
               const isUser = msg.role === 'user';
 
               return (

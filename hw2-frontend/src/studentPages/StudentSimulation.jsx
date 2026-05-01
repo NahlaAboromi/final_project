@@ -1,7 +1,7 @@
 // src/studentPages/StudentSimulation.jsx
 import React, { useState, useEffect, useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ThemeProvider, ThemeContext } from '../DarkLightMood/ThemeContext';
+import { ThemeContext } from '../DarkLightMood/ThemeContext';
 import StudentHeader from "../studentPages/StudentHeader";
 import { UserContext } from '../context/UserContext';
 import { StudentNotificationsContext } from '../context/StudentNotificationsContext';
@@ -434,10 +434,6 @@ console.error('data3.message:', data3?.message);
   );
 };
 
-const ViewStudentSimulation = () => (
-  <ThemeProvider>
-    <StudentSimulation />
-  </ThemeProvider>
-);
+const ViewStudentSimulation = () => <StudentSimulation />;
 
 export default ViewStudentSimulation;

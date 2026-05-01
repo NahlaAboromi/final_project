@@ -7,8 +7,7 @@ import Button from "../Button";
 import Alert from "../Alert";
 import Footer from "../../layout/Footer";
 import SharedHeader from "../../layoutForEducatorsAndStudents/SharedHeader";
-import { ThemeContext, ThemeProvider } from "../../DarkLightMood/ThemeContext";
-
+import { ThemeContext } from "../../DarkLightMood/ThemeContext";
 import { useI18n } from "../../utils/i18n";
 import { LanguageContext } from "../../context/LanguageContext";
 
@@ -139,11 +138,6 @@ const VerifyCodeContent = () => {
   );
 };
 
-/** Wrapper */
-const VerifyCode = () => (
-  <ThemeProvider>
-    <VerifyCodeContent />
-  </ThemeProvider>
-);
+const VerifyCode = () => <VerifyCodeContent />;
 
 export default VerifyCode;

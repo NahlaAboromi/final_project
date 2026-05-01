@@ -3,7 +3,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import StudentHeader from "./StudentHeader";
 import Footer from "../layout/Footer";
-import { ThemeContext,ThemeProvider } from '../DarkLightMood/ThemeContext';
+import { ThemeContext } from '../DarkLightMood/ThemeContext';
 import { UserContext } from '../context/UserContext';
 import AnswerCard from './AnswerCard';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -143,21 +143,6 @@ return (
 );
 
 };
-
-
-const ShowSimulationResult = () => {
-
-  return (
-
-    <ThemeProvider>
-
-      <SimulationResult />
-
-    </ThemeProvider>
-
-  );
-
-};
-
+const ShowSimulationResult = () => <SimulationResult />;
 
 export default ShowSimulationResult;
