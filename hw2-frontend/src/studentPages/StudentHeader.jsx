@@ -14,9 +14,8 @@ const StudentHeader = () => {
   const { theme } = useContext(ThemeContext);
 
   const {
-    notifications,
-    notificationCount,
-    isLoading,
+notifications,
+isLoading,
     error,
     markNotificationAsRead,
     markAllNotificationsAsRead,
@@ -27,7 +26,13 @@ const { t, dir, lang } = useI18n('studentHeaderNav');
   const isRTL = dir === 'rtl';
 
   const student = user;
+const visibleNotifications =
+  lang === 'he'
+    ? (notifications?.he || [])
+    : (notifications?.en || []);
 
+const visibleNotificationCount =
+  visibleNotifications.filter(n => !n.read).length;
   const getTypeStyle = (type) => {
     switch (type) {
       case 'submitted': return 'bg-green-500 text-white';
@@ -269,14 +274,14 @@ const { t, dir, lang } = useI18n('studentHeaderNav');
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className={`text-slate-600 dark:text-white ${notificationCount > 0 ? 'bell-animation' : ''}`}
+              className={`text-slate-600 dark:text-white ${visibleNotificationCount  > 0 ? 'bell-animation' : ''}`}
             >
               <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
               <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
             </svg>
 
-            {notificationCount > 0 && (
-              <span className="notification-badge">{notificationCount}</span>
+            {visibleNotificationCount > 0 && (
+<span className="notification-badge">{visibleNotificationCount}</span>
             )}
           </div>
 
@@ -291,8 +296,7 @@ const { t, dir, lang } = useI18n('studentHeaderNav');
               }
             >
               <h3 className="font-bold text-sm" dir={isRTL ? 'rtl' : 'ltr'}>
-                {t('notifications', 'Notifications')} <span dir="ltr">({notificationCount})</span>
-              </h3>
+{t('notifications', 'Notifications')} <span dir="ltr">({visibleNotificationCount})</span>              </h3>
 
               <button
                 onClick={() => {
@@ -313,27 +317,26 @@ const { t, dir, lang } = useI18n('studentHeaderNav');
                 </div>
               ) : error ? (
                 <div className="p-4 text-center text-red-500">{error}</div>
-              ) : notifications.length === 0 ? (
+              ) : visibleNotifications.length === 0? (
                 <div className={'p-4 text-center  dark:text-gray-300 text-gray-500'}>
                   {t('noNotifications', 'No notifications')}
                 </div>
               ) : (
-                notifications
-                  .slice()
-                  .reverse()
+visibleNotifications
+  .slice()
+  .reverse()
                   .map((notification, index) => (
                     <div
-                      key={index}
-                      dir={isRTL ? 'rtl' : 'ltr'}
+key={notification._id || index}                      dir={isRTL ? 'rtl' : 'ltr'}
                       onClick={() => {
-                        if (!notification.read) markNotificationAsRead(notification._id);
+                        if (!notification.read) markNotificationAsRead(notification._id, notification);
                       }}
-                      className={`px-4 py-3 border-b cursor-pointer ${
-                        theme === 'dark'
-                          ? 'bg-slate-700 hover:bg-slate-600 border-slate-600 text-gray-200'
-                          : 'border-gray-100 hover:bg-gray-50 text-gray-800'
+className={`px-4 py-3 border-b cursor-pointer ${
+  theme === 'dark'
+    ? 'bg-slate-700 hover:bg-slate-600 border-slate-600 text-gray-200'
+    : 'border-gray-100 hover:bg-gray-50 text-gray-800'
 } transition-colors flex items-start gap-3 ${
-  isRTL ? 'text-right flex-row-reverse' : 'text-left flex-row'
+  isRTL ? 'flex-row text-right' : 'flex-row text-left'
 } ${notification.read ? 'opacity-60' : ''}`}
                     >
                       <div
@@ -344,7 +347,9 @@ const { t, dir, lang } = useI18n('studentHeaderNav');
                         {getTypeIcon(notification.type)}
                       </div>
                       <div className="flex-1">
-                        <p className="text-sm font-medium">{notification.title}</p>
+                        <p className="text-sm font-medium">
+  {notification.content || notification.title}
+</p>
                         <p
                           className={`text-xs ${
                             theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
@@ -354,9 +359,13 @@ const { t, dir, lang } = useI18n('studentHeaderNav');
                         </p>
                       </div>
 
-                      {!notification.read && (
-                        <span className="flex-shrink-0 w-2 h-2 rounded-full bg-blue-500 mt-2"></span>
-                      )}
+{!notification.read && (
+  <span
+    className={`flex-shrink-0 w-2 h-2 rounded-full bg-blue-500 mt-2 ${
+     'order-last'
+    }`}
+  ></span>
+)}
                     </div>
                   ))
               )}

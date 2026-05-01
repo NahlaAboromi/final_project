@@ -175,38 +175,66 @@ if (!answer.trim()) {
 
     console.group('[STEP 4] FETCH /studentNotifications/create');
 
-    const notificationBody = {
-      studentId: user.id,
-      type: 'submitted',
-      title: t('notif.title'),
-      content: t('notif.content', '').replace('{classCode}', classCode),
-      time: new Date().toLocaleString(),
-      read: false
-    };
+const notificationTime = new Date().toLocaleString();
 
-    console.log('notification body:');
-    console.dir(notificationBody, { depth: 5 });
+const englishNotificationBody = {
+  studentId: user.id,
+  type: 'submitted',
+  title: 'Simulation submitted',
+  content: `The simulation for class ${classCode} was submitted successfully.`,
+  time: notificationTime,
+  read: false
+};
+
+const hebrewNotificationBody = {
+  studentId: user.id,
+  type: 'submitted',
+  title: 'הסימולציה נשלחה',
+  content: `הסימולציה של הכיתה ${classCode} נשלחה בהצלחה.`,
+  time: notificationTime,
+  read: false
+};
+
+console.log('english notification body:');
+console.dir(englishNotificationBody, { depth: 5 });
+
+console.log('hebrew notification body:');
+console.dir(hebrewNotificationBody, { depth: 5 });
 
     console.time('notification fetch time');
 
-    const response2 = await fetch('/api/studentNotifications/create', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(notificationBody),
-    });
+const response2 = await fetch('/api/studentNotifications/create', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(englishNotificationBody),
+});
 
-    console.timeEnd('notification fetch time');
+const response3 = await fetch('/api/studentNotifications/create-hebrew', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(hebrewNotificationBody),
+});
+console.log('response3.status:', response3.status);
+console.log('response3.ok:', response3.ok);
+console.timeEnd('notification fetch time');
 
-    console.log('response2.status:', response2.status);
+console.log('response2.status:', response2.status);
+console.log('response2.ok:', response2.ok);
+console.log('response3.ok:', response3.ok);
 
-    console.log('response2.ok:', response2.ok);
+const data2 = await response2.json();
 
-    const data2 = await response2.json();
+console.log('response2 JSON data:');
+console.dir(data2, { depth: 10 });
 
-    console.log('response2 JSON data:');
-    console.dir(data2, { depth: 10 });
+const data3 = await response3.json();
+
+console.log('response3 JSON data:');
+console.dir(data3, { depth: 10 });
 
     console.groupEnd();
 
@@ -242,8 +270,7 @@ if (!answer.trim()) {
 
 
 
-    if (response1.ok && response2.ok) {
-
+if (response1.ok && response2.ok && response3.ok) {
       console.log('✅ BOTH REQUESTS OK');
 
       setIsLoadingToSubmit(false);
@@ -273,7 +300,7 @@ if (!answer.trim()) {
       console.error('data1.message:', data1?.message);
 
       console.error('data2.message:', data2?.message);
-
+console.error('data3.message:', data3?.message);
       alert(t('errors.submitError'));
 
     }

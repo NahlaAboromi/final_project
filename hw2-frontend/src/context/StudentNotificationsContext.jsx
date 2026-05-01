@@ -8,7 +8,7 @@ export const StudentNotificationsProvider = ({ children }) => {
   const { user } = useContext(UserContext);
   const userId = user?.id;
 
-  const [notifications, setNotifications] = useState([]);
+const [notifications, setNotifications] = useState({ en: [], he: [] });
   const [notificationCount, setNotificationCount] = useState(0);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -27,8 +27,12 @@ export const StudentNotificationsProvider = ({ children }) => {
         console.warn(`Request failed with status ${response.status}`);
         return;
       }
-        setNotifications(data);
-        setNotificationCount(data.filter(n => !n.read).length);  
+setNotifications({
+  en: data.en || [],
+  he: data.he || []
+});
+
+setNotificationCount((data.en || []).filter(n => !n.read).length);
     } catch (err) {
     setError(err.message);
   } finally {
@@ -43,13 +47,19 @@ export const StudentNotificationsProvider = ({ children }) => {
 }, [userId]);
 
   // Mark single notification as read and refresh list
-  const markNotificationAsRead = async (notificationId) => {
+const markNotificationAsRead = async (notificationId, notification) => {  
      setIsLoading(true);
     setError(null);
     try {
-      await fetch(`/api/studentNotifications/mark-as-read/${notificationId}`, {
-        method: 'PATCH',
-      });
+await fetch(`/api/studentNotifications/mark-as-read/${notificationId}`, {
+  method: 'PATCH',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    studentId: notification.studentId,
+    type: notification.type,
+    time: notification.time
+  })
+});
       await fetchNotifications();
     }catch (err) {
     setError(err.message);

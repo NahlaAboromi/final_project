@@ -12,9 +12,10 @@ import { useI18n } from '../../utils/i18n';
 
 const ClassProgressCard = ({ classData, isDark }) => {
   const { t, dir, lang } = useI18n('classProgress');
-  const mutedText = isDark ? 'text-gray-300' : 'text-gray-600';
+const mutedText = isDark ? 'text-gray-300' : 'text-gray-600';
+const LRM = '\u200E';
 
-  const toNum = (v) => (Number.isFinite(Number(v)) ? Number(v) : 0);
+const toNum = (v) => (Number.isFinite(Number(v)) ? Number(v) : 0);
   const toFixedSafe = (v, d = 1) => toNum(v).toFixed(d);
 
   const progressData = (classData?.attempts || []).map((attempt, index) => {
@@ -22,9 +23,22 @@ const ClassProgressCard = ({ classData, isDark }) => {
     return {
       attempt: `${t('attempt')} ${index + 1}`,
       score: toNum(attempt?.analysisResult?.overallScore),
-      date: dt
-        ? `${dt.toLocaleDateString()} ${dt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
-        : '—',
+date: dt
+  ? (() => {
+      const date = dt.toLocaleDateString(lang === 'he' ? 'he-IL' : undefined, {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+      });
+
+      const time = dt.toLocaleTimeString(lang === 'he' ? 'he-IL' : undefined, {
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+
+      return `${LRM}${date} ${time}${LRM}`;
+    })()
+  : '—',
     };
   });
 
@@ -39,7 +53,7 @@ const ClassProgressCard = ({ classData, isDark }) => {
   const subj = (classData?.subject || '').replace('-', ' ');
 
   const arrow = lang === 'he' ? '←' : '→';
-  const LRM = '\u200E';
+
   const fmt = (n) => (lang === 'he' ? `${LRM}${toFixedSafe(n, 1)}${LRM}` : toFixedSafe(n, 1));
   const firstLastLine =
     lang === 'he'
@@ -69,7 +83,10 @@ const ClassProgressCard = ({ classData, isDark }) => {
           </div>
           {attempts.length > 1 && improvement !== 0 && (
             <div className={`text-xs sm:text-sm mt-1 ${improvement > 0 ? 'text-green-600' : 'text-red-600'}`}>
-              {improvement > 0 ? '+' : ''}{toFixedSafe(improvement, 1)} {t('improvement')}
+              {lang === 'he'
+  ? `${LRM}${improvement > 0 ? '+' : ''}${toFixedSafe(improvement, 1)}${LRM} ${t('improvement')}`
+  : `${improvement > 0 ? '+' : ''}${toFixedSafe(improvement, 1)} ${t('improvement')}`
+}
             </div>
           )}
         </div>
@@ -85,10 +102,22 @@ const ClassProgressCard = ({ classData, isDark }) => {
           <ResponsiveContainer width="100%" height={180}>
             <LineChart data={progressData}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" tick={{ fontSize: 11 }} />
-              <YAxis domain={[0, 5]} tick={{ fontSize: 11 }} />
-              <Tooltip />
-              <Line
+<XAxis
+  dataKey="date"
+  tick={{ fontSize: 13 }}
+  dy={10}
+/>              <YAxis
+  domain={[0, 5]}
+  tick={{ fontSize: 11 }}
+  dx={-10}
+/><YAxis domain={[0, 5]} tick={{ fontSize: 11 }} />
+<Tooltip
+  labelStyle={{ direction: 'ltr', textAlign: 'left' }}
+  formatter={(value) => [
+    `${LRM}${toFixedSafe(value, 1)}${LRM}`,
+    lang === 'he' ? 'ציון' : 'score'
+  ]}
+/>             <Line
                 type="monotone"
                 dataKey="score"
                 stroke="#2563eb"
@@ -143,12 +172,24 @@ const ClassProgressCard = ({ classData, isDark }) => {
           <span className={`text-xs sm:text-sm flex items-center ${mutedText}`}>
             <span className={`${dir === 'rtl' ? 'ml-1' : 'mr-1'}`}>📅</span>
             <span className="whitespace-nowrap">
-              {latestAttempt?.submittedAt
-                ? new Date(latestAttempt.submittedAt).toLocaleString([], {
-                    day: '2-digit', month: '2-digit', year: 'numeric',
-                    hour: '2-digit', minute: '2-digit'
-                  })
-                : '—'}
+{latestAttempt?.submittedAt
+  ? (() => {
+      const d = new Date(latestAttempt.submittedAt);
+
+      const date = d.toLocaleDateString(lang === 'he' ? 'he-IL' : undefined, {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+      });
+
+      const time = d.toLocaleTimeString(lang === 'he' ? 'he-IL' : undefined, {
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+
+      return `${LRM}${date} ${time}${LRM}`;
+    })()
+  : '—'}
             </span>
           </span>
         </div>

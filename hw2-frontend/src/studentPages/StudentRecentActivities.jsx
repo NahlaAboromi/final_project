@@ -10,7 +10,10 @@ const RecentActivity = () => {
 
   // ✅ i18n (NEW namespace)
   const { t, dir, lang } = useI18n('studentRecentActivity');
-
+const visibleNotifications =
+  lang === 'he'
+    ? (notifications?.he || [])
+    : (notifications?.en || []);
   // Fetch notifications
 useEffect(() => {
   fetchNotifications();
@@ -25,8 +28,8 @@ useEffect(() => {
   }
 
   // Sort notifications by date, newest first
-  const sortedNotifications = [...notifications].sort(
-    (a, b) => parseCustomDate(b.time) - parseCustomDate(a.time)
+const sortedNotifications = [...visibleNotifications].sort(
+      (a, b) => parseCustomDate(b.time) - parseCustomDate(a.time)
   );
 
   // Take the 3 most recent notifications
@@ -53,7 +56,7 @@ useEffect(() => {
   };
 
   // Show message if no notifications are available
-  if (!notifications.length) {
+  if (!visibleNotifications.length) {
     return (
       <div dir={dir} lang={lang} className="text-center text-gray-500 dark:text-gray-300">
         {t('noActivities', 'No activities found.')}

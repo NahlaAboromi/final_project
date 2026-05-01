@@ -38,7 +38,21 @@ const StudentCard = ({ student }) => {
     totalAttempts,
     overallScore
   };
+const formatLatestActivity = (value) => {
+  if (!value) return t('noActivity');
 
+  const date = new Date(value);
+
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+
+  return `${day}.${month}.${year}, ${hours}:${minutes}:${seconds}`;
+};
   return (
     <div
       dir={dir}
@@ -66,28 +80,24 @@ const StudentCard = ({ student }) => {
               {username}
             </h3>
             <p className="text-xs sm:text-sm text-gray-500">
-              {t('studentId')}: {id}
-            </p>
+{t('studentId')}: <span dir="ltr">{id}</span>            </p>
           </div>
         </div>
         <div className="text-base sm:text-lg font-bold text-yellow-600 whitespace-nowrap flex-shrink-0">
-          {averageScore}/5
+          <span dir="ltr">{averageScore} / 5</span>
         </div>
       </div>
 
       {/* סטטיסטיקות */}
       <div className={`text-xs sm:text-sm mb-3 sm:mb-4 space-y-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
         <p>
-          {t('uniqueSimulations')}: <strong>{uniqueSimulations}</strong>
-        </p>
+{t('uniqueSimulations')}: <strong>{uniqueSimulations}</strong>        </p>
         <p>
-          {t('totalAttempts')}: <strong>{totalAttempts}</strong>
-        </p>
+{t('totalAttempts')}: <strong>{totalAttempts}</strong>        </p>
         <p className="break-words">
           {t('latestActivity')}:{" "}
           <strong>
-            {latestActivity ? new Date(latestActivity).toLocaleString() : t('noActivity')}
-          </strong>
+<span dir="ltr">{formatLatestActivity(latestActivity)}</span>          </strong>
         </p>
       </div>
 

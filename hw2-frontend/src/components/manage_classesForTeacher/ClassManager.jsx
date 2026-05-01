@@ -102,15 +102,13 @@ const ClassManagerContent = () => {
                 <input
                   type="text"
                   placeholder={t('searchPlaceholder')}
-                  className="w-full py-2 px-4 pr-10 text-sm sm:text-base rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  value={searchTerm}
+className={`w-full py-2 px-4 ${lang === 'he' ? 'pl-10' : 'pr-10'} text-sm sm:text-base rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500`}                  value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
                 {/* Search Icon */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 sm:h-5 sm:w-5 absolute right-3 top-2.5 text-gray-400"
-                  fill="none"
+className={`h-4 w-4 sm:h-5 sm:w-5 absolute ${lang === 'he' ? 'left-3' : 'right-3'} top-2.5 text-gray-400`}                  fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                 >

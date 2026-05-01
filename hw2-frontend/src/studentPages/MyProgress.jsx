@@ -35,13 +35,16 @@ function SimulationProgressChart({ submissions }) {
               label={{ value: t('attemptNumber', 'Attempt Number'), position: "insideBottom", offset: -5, fill: "#6b7280" }}
               tick={{ fill: "#6b7280" }}
             />
-            <YAxis
-              domain={[0, 5]}
-              label={{ value: t('score', 'Score'), angle: -90, position: "insideLeft", fill: "#6b7280" }}
-              tick={{ fill: "#6b7280" }}
-            />
-            <Tooltip
-              content={({ active, payload, label }) => {
+<YAxis
+  domain={[0, 5]}
+  label={{ value: t('score', 'Score'), angle: -90, position: "insideLeft", fill: "#6b7280" }}
+  tick={{ fill: "#6b7280", fontSize: 14 }}
+  dx={-10}
+  width={40}
+/>
+<Tooltip
+  cursor={false}
+  content={({ active, payload, label }) => {
                 if (active && payload && payload.length) {
                   return (
                     <div>
@@ -175,21 +178,34 @@ const MyProgress = () => {
       setIsExporting(false);
 
       // Create export notification for the student
-      await fetch('/api/studentNotifications/create', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          studentId: user.id,
-          type: 'export',
-          title: t('pdfGeneratedTitle', '📄 PDF Report Generated'),
-          content: t(
-            'pdfGeneratedContent',
-            'A detailed progress report containing charts and simulation results has been successfully exported as a PDF.'
-          ),
-          time: new Date().toLocaleString(),
-          read: false
-        }),
-      });
+// Create export notifications for the student EN + HE
+const notificationTime = new Date().toLocaleString();
+
+await fetch('/api/studentNotifications/create', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    studentId: user.id,
+    type: 'export',
+    title: '📄 PDF Report Generated',
+    content: 'A detailed progress report containing charts and simulation results has been successfully exported as a PDF.',
+    time: notificationTime,
+    read: false
+  }),
+});
+
+await fetch('/api/studentNotifications/create-hebrew', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    studentId: user.id,
+    type: 'export',
+    title: '📄 דוח PDF נוצר',
+    content: 'דוח התקדמות מפורט הכולל גרפים ותוצאות סימולציות יוצא בהצלחה כ-PDF.',
+    time: notificationTime,
+    read: false
+  }),
+});
 
       fetchNotifications();
     }
@@ -335,8 +351,18 @@ const skillChartData = Object.entries(averageSkills).map(([skill, score]) => ({
   const skillTimeData = submissions.map(sub => {
     const result = sub.analysisResult;
     const date = new Date(sub.submittedAt);
-    const label = date.toLocaleString(locale, { dateStyle: 'short', timeStyle: 'short' });
+const day = String(date.getDate()).padStart(2, '0');
+const month = String(date.getMonth() + 1).padStart(2, '0');
+const year = date.getFullYear();
 
+const datePart = `${day}.${month}.${year}`;
+
+const timePart = date.toLocaleTimeString(lang === 'he' ? 'he-IL' : 'en-GB', {
+  hour: '2-digit',
+  minute: '2-digit'
+});
+
+const label = `${datePart}, ${timePart}`;
     return {
       submission: label,
       selfAwareness: result.selfAwareness?.score || 0,
@@ -405,8 +431,14 @@ const skillChartData = Object.entries(averageSkills).map(([skill, score]) => ({
               <ResponsiveContainer width="100%" height={400}>
                 <BarChart data={skillChartData} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
                   <CartesianGrid strokeDasharray="5 5" />
-<XAxis dataKey="skillLabel" tick={{ fill: isDark ? "#fff" : "#000" }} />                  <YAxis domain={[0, 5]} tick={{ fill: isDark ? "#fff" : "#000" }} />
+<XAxis dataKey="skillLabel" tick={{ fill: isDark ? "#fff" : "#000" }} />                  <YAxis
+  domain={[0, 5]}
+  tick={{ fill: isDark ? "#fff" : "#000", fontSize: 14 }}
+  dx={-12}
+  width={45}
+/>
                   <Tooltip
+                    cursor={false}
                     content={({ active, payload, label }) => {
                       if (active && payload && payload.length) {
                         return (
@@ -421,7 +453,7 @@ const skillChartData = Object.entries(averageSkills).map(([skill, score]) => ({
                       return null;
                     }}
                   />
-                  <Bar dataKey="score" fill="#3b82f6" cursor={{ fill: "rgba(5, 150, 105, 0.2)" }} />
+                  <Bar dataKey="score" fill="#3b82f6" cursor={{ fill: "transparent" }}/>
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -432,20 +464,38 @@ const skillChartData = Object.entries(averageSkills).map(([skill, score]) => ({
               </h3>
 
               <ResponsiveContainer width="100%" height={400}>
-                <LineChart data={skillTimeData} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
+              <LineChart
+  data={skillTimeData}
+  margin={{ top: 20, right: 60, left: 20, bottom: 20 }}
+>
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="submission" tick={{ fill: isDark ? "#fff" : "#000" }} />
-                  <YAxis domain={[0, 5]} tick={{ fill: isDark ? "#fff" : "#000" }} />
+<XAxis
+  dataKey="submission"
+  tick={{ fill: isDark ? "#fff" : "#000", direction: 'ltr', fontSize: 14 }}
+  tickFormatter={(value) => String(value)}
+  interval={0}
+  minTickGap={10}
+  dy={10}
+  height={40}
+/>
+                 <YAxis
+  domain={[0, 5]}
+  tick={{ fill: isDark ? "#fff" : "#000", fontSize: 14 }}
+  dx={-10}
+  width={40}
+/>
                   <Tooltip
                     content={({ active, payload, label }) => {
                       if (active && payload && payload.length) {
                         return (
                           <div className="bg-white dark:bg-gray-800 p-2 rounded shadow text-sm border border-gray-300 dark:border-gray-600">
-                            <p className="font-semibold mb-2">{label}</p>
-                            {payload.map((entry, index) => (
+<p className={`font-semibold mb-2 ${lang === 'he' ? 'text-right' : 'text-left'}`}>
+  <span dir="ltr" className="inline-block">
+    {label}
+  </span>
+</p>                        {payload.map((entry, index) => (
                               <p key={index}>
-                                {t(`skills.${entry.name}`, entry.name)}: <strong>{Number(entry.value).toFixed(2)}</strong>{entry.name}: <strong>{Number(entry.value).toFixed(2)}</strong>
-                              </p>
+{t(`skills.${entry.name}`, entry.name)}: <strong>{Number(entry.value).toFixed(2)}</strong>                              </p>
                             ))}
                           </div>
                         );
@@ -453,8 +503,7 @@ const skillChartData = Object.entries(averageSkills).map(([skill, score]) => ({
                       return null;
                     }}
                   />
-                  <Legend formatter={(value) => t(`skills.${value}`, value)} /><Legend />
-                  <Line type="monotone" dataKey="selfAwareness" stroke="#8884d8" strokeWidth={2} />
+<Legend formatter={(value) => t(`skills.${value}`, value)} />                  <Line type="monotone" dataKey="selfAwareness" stroke="#8884d8" strokeWidth={2} />
                   <Line type="monotone" dataKey="selfManagement" stroke="#82ca9d" strokeWidth={2} />
                   <Line type="monotone" dataKey="socialAwareness" stroke="#ffc658" strokeWidth={2} />
                   <Line type="monotone" dataKey="relationshipSkills" stroke="#9b59b6" strokeWidth={2} />
@@ -524,13 +573,24 @@ className={`absolute top-4 ${dir === 'rtl' ? 'left-6' : 'right-6'} text-sm bg-sl
                     {submissions.length} {t('attempts', 'attempts')}
                   </span>
 
-                  {submissions.length > 1 ? (
-                    <span>
-                      {t('first', 'First')} <span className="text-yellow-600">{first.analysisResult?.overallScore?.toFixed(1)}/5</span>
-                      {" "}→{" "}
-                      {t('latest', 'Latest')} <span className="text-yellow-600">{latest.analysisResult?.overallScore?.toFixed(1)}/5</span>
-                    </span>
-                  ) : (
+{submissions.length > 1 ? (
+  <span>
+<span className="inline-flex items-center gap-1" dir={dir}>
+  <span>{t('first', 'First')}</span>
+  <span className="text-yellow-600" dir="ltr">
+    {first.analysisResult?.overallScore?.toFixed(1)}/5
+  </span>
+
+<span dir="ltr" className="inline-block">
+  {dir === 'rtl' ? '←' : '→'}
+</span>
+  <span>{t('latest', 'Latest')}</span>
+  <span className="text-yellow-600" dir="ltr">
+    {latest.analysisResult?.overallScore?.toFixed(1)}/5
+  </span>
+</span>
+  </span>
+) : (
                     <span>
                       {t('first', 'First')} <span className="text-yellow-600">{first.analysisResult?.overallScore?.toFixed(1)}/5</span>
                     </span>
@@ -540,7 +600,9 @@ className={`absolute top-4 ${dir === 'rtl' ? 'left-6' : 'right-6'} text-sm bg-sl
                 <div className="text-sm mb-2">
                   <span role="img">📅</span>{" "}
                   <strong>
-                    {t('latestAttempt', 'Latest Attempt')} ({formatDate(latest.submittedAt)}):
+                    {t('latestAttempt', 'Latest Attempt')} (
+  <span dir="ltr">{formatDate(latest.submittedAt)}</span>
+):
                   </strong>
 
                   <div className={`mt-2 p-3 rounded border-l-4 ${isDark ? 'bg-gray-600 text-white border border-blue-700' : 'bg-gray-300 text-black border border-gray-800'} `}>
@@ -572,12 +634,13 @@ className={`absolute top-4 ${dir === 'rtl' ? 'left-6' : 'right-6'} text-sm bg-sl
                       <div key={i} className="mb-3">
 <p className="text-sm mb-1">{t(`skills.${cat}`, cat.replace(/([A-Z])/g, ' $1'))}</p>                      <div className="relative h-6 bg-gray-600 rounded-full overflow-hidden">
                           <div
-                            className={`absolute left-0 top-0 h-6 rounded-full bg-gradient-to-r ${colors[i]}`}
+                            className={`absolute ${dir === 'rtl' ? 'right-0' : 'left-0'} top-0 h-6 rounded-full bg-gradient-to-r ${colors[i]}`}
                             style={{ width: `${(score / 5) * 100}%` }}
                           />
                         </div>
-                        <p className="text-right text-sm mt-1">{score.toFixed(1)}</p>
-                      </div>
+<p className={`${dir === 'rtl' ? 'text-left' : 'text-right'} text-sm mt-1`}>
+  {score.toFixed(1)}
+</p>                      </div>
                     );
                   })}
                 </div>

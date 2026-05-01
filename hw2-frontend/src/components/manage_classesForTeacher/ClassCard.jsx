@@ -188,7 +188,9 @@ const ClassCard = ({ classData, onDeleteSuccess }) => {
             </h3>
             <div className="flex items-center justify-between mb-1">
               <div className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">
-                {averageScore} / 5
+                <span dir="ltr">
+  {averageScore} / 5
+</span>
               </div>
               <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
                 {t('stats.avgSelLabel')}
