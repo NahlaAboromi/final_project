@@ -6,6 +6,8 @@ require('dotenv').config();
 // Load data from environment variables
 const MAIL_USER = process.env.MAIL_USER;
 const MAIL_PASSWORD = process.env.MAIL_PASSWORD;
+console.log("MAIL_USER:", MAIL_USER);
+console.log("MAIL_PASSWORD loaded:", MAIL_PASSWORD ? "YES" : "NO");
 // Sends a verification email to the user for password reset
 async function sendVerificationEmail(email, code) {
   try {

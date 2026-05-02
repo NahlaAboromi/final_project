@@ -90,15 +90,18 @@ const ForgotPasswordContent = () => {
     <div
       dir={dir}
       lang={langAttr}
-      className={`min-h-screen w-screen flex flex-col ${isDark ? 'bg-slate-900 text-white' : 'bg-gray-50 text-slate-900'}`}
-    >
+className={`min-h-screen w-screen flex flex-col ${isDark ? 'bg-slate-900 text-white' : 'bg-gray-50 text-slate-900'}`}  >
       {/* Header */}
       <div className="px-4 mt-4">
         <SharedHeader />
       </div>
 
       {/* Main */}
-      <main className="flex-1 w-full px-4 py-6 flex justify-center items-center">
+<main className="flex-1 w-full px-4 py-6">  <div
+    className={`min-h-[calc(100vh-170px)] flex items-center justify-center p-6 rounded ${
+      isDark ? "bg-slate-700" : "bg-slate-200"
+    }`}
+  >
         <div className={`max-w-md w-full space-y-8 ${isDark ? 'bg-slate-800' : 'bg-white'} p-10 rounded-xl shadow-lg`}>
           <div className="flex flex-col items-center space-y-2">
             <h1 className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-slate-800'} mb-2`}>
@@ -139,7 +142,8 @@ const ForgotPasswordContent = () => {
             </Link>
           </div>
         </div>
-      </main>
+      </div>
+    </main>
 
       {/* Footer */}
       <div className="px-4 pb-4">

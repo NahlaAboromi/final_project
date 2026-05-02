@@ -37,6 +37,7 @@ const RegisterPage = () => {
   const [skipProfilePic, setSkipProfilePic] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [step, setStep] = useState(1); // 1 = basic info, 2 = profile pic
 
   if (!ready) return null; // למנוע FOUC קצר
@@ -119,12 +120,17 @@ const RegisterPage = () => {
         }
       );
 
-      if (response.ok) {
-        await response.json(); // savedStudent (לא משנים לוגיקה)
-        setError("");
-        const loginPage = role === "teacher" ? "/login" : "/student-login";
-        setTimeout(() => navigate(loginPage), 2500);
-      } else {
+if (response.ok) {
+  await response.json();
+  setError("");
+setSuccess(
+  lang === "he"
+    ? "✅ ההרשמה בוצעה בהצלחה! מעבירים אותך למסך ההתחברות..."
+    : "✅ Registration successful! Redirecting to login..."
+);  const loginPage = role === "teacher" ? "/login" : "/student-login";
+  setTimeout(() => navigate(loginPage), 2500);
+}
+      else {
         const errorData = await response.json();
         setError(errorData.message || t("errRegisterFail"));
       }
@@ -152,7 +158,12 @@ const RegisterPage = () => {
         <SharedHeader />
       </div>
 
-      <main className="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 w-full">
+     <main className="flex-1 w-full px-4 py-6">
+  <div
+    className={`min-h-[calc(100vh-170px)] flex items-center justify-center p-6 rounded ${
+      isDark ? "bg-slate-700" : "bg-slate-200"
+    }`}
+  >
         <div className={`max-w-md w-full space-y-8 ${isDark ? 'bg-slate-800' : 'bg-white'} p-10 rounded-xl shadow-lg`}>
           <div>
             <h2 className="mt-6 text-center text-3xl font-extrabold">{t("title")}</h2>
@@ -168,7 +179,6 @@ const RegisterPage = () => {
           </div>
 
           {error && <Alert type="error" message={error} />}
-
           {/* Stepper */}
           <div className="flex justify-center">
             <div className="w-full">
@@ -371,19 +381,38 @@ const RegisterPage = () => {
                     isLoading={isLoading}
                     variant="primary"
                     className={`${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
-                    disabled={isLoading}
-                  >
-                    {step === 1 ? t("btnContinue") : t("btnRegister")}
-                  </Button>
+disabled={isLoading || success}                  >
+{
+  success
+    ? (lang === "he" ? "מעבירים..." : "Redirecting...")
+    : step === 1
+    ? t("btnContinue")
+    : t("btnRegister")
+}           </Button>
                 </div>
               </form>
+              {success && (
+  <div className="mt-6 flex flex-col items-center justify-center gap-3">
+    
+    {/* Spinner */}
+    <div className="w-6 h-6 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+    
+    {/* Text */}
+    <p className="text-sm text-green-500 text-center">
+      {success}
+    </p>
+
+  </div>
+)}
             </div>
           </div>
         </div>
-      </main>
+      </div>
+    </main>
 
-      <Footer />
-    </div>
+<div className="px-4 pb-4">
+  <Footer />
+</div>    </div>
   );
 };
 

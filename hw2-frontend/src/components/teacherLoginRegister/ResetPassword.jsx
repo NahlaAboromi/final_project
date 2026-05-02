@@ -89,7 +89,12 @@ const ResetPasswordContent = () => {
         <SharedHeader />
       </div>
 
-      <main className="flex-1 w-full px-4 py-6 flex justify-center items-center">
+      <main className="flex-1 w-full px-4 py-6">
+  <div
+    className={`min-h-[calc(100vh-170px)] flex items-center justify-center p-6 rounded ${
+      isDark ? "bg-slate-700" : "bg-slate-200"
+    }`}
+  >
         <div className={`${isDark ? "bg-slate-700" : "bg-slate-200"} p-8 rounded w-full max-w-xl`}>
           <h1 className={`text-2xl font-bold ${isDark ? "text-white" : "text-slate-800"} mb-2`}>
             {t("title")}
@@ -138,7 +143,8 @@ const ResetPasswordContent = () => {
             </p>
           </div>
         </div>
-      </main>
+      </div>
+    </main>
 
       <div className="px-4 pb-4">
         <Footer />
