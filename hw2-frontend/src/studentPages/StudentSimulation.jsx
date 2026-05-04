@@ -380,8 +380,16 @@ console.error('data3.message:', data3?.message);
                 <p className="text-gray-700 dark:text-gray-200 mb-4">{question}</p>
 
                 <form onSubmit={handleSubmit}>
-                  <textarea
-                    className="w-full p-3 rounded bg-slate-200 text-black dark:bg-slate-600 dark:text-white mb-4 resize-none"
+<textarea
+  style={{
+    scrollbarWidth: 'thin',
+    scrollbarColor: isDark ? '#64748b #1e293b' : '#94a3b8 #e2e8f0'
+  }}
+  className={`w-full p-3 rounded mb-4 resize-none ${
+    isDark
+      ? "bg-slate-700 text-white border border-slate-600"
+      : "bg-slate-200 text-black border border-slate-300"
+  }`}
                     rows="5"
                     placeholder={t('placeholder')}
                     value={answer}

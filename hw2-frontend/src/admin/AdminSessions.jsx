@@ -138,8 +138,10 @@ const AdminSessionsContent = () => {
 
   const { t, ready } = useI18n("adminSessions");
 
-  const [assignedDate, setAssignedDate] = useState("");
-  const [groupType, setGroupType] = useState("all");
+const [assignedDate, setAssignedDate] = useState("");
+const [groupType, setGroupType] = useState("all");
+const [anonIdFilter, setAnonIdFilter] = useState("");
+const [semesterFilter, setSemesterFilter] = useState("all");
 
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -150,12 +152,17 @@ const AdminSessionsContent = () => {
 const [deleteOpen, setDeleteOpen] = useState(false);
 const [rowToDelete, setRowToDelete] = useState(null);
 const [deleteLoading, setDeleteLoading] = useState(false);
-  const hasActiveFilters = assignedDate !== "" || groupType !== "all";
-
-  const clearFilters = () => {
-    setAssignedDate("");
-    setGroupType("all");
-  };
+const hasActiveFilters =
+  assignedDate !== "" ||
+  groupType !== "all" ||
+  anonIdFilter.trim() !== "" ||
+  semesterFilter !== "all";
+const clearFilters = () => {
+  setAssignedDate("");
+  setGroupType("all");
+  setAnonIdFilter("");
+  setSemesterFilter("all");
+};
 
   const goBackHome = () => navigate("/admin");
 
@@ -263,7 +270,46 @@ const confirmDelete = async () => {
     }
     return isDark ? "bg-slate-800 text-slate-200" : "bg-slate-100 text-slate-700";
   };
+const isFirstYearStudent = (semester) => {
+  const s = String(semester || "").toLowerCase();
 
+  return (
+    s.includes("ראשון") ||
+    s.includes("שני") ||
+    s.includes("1st") ||
+    s.includes("2nd")
+  );
+};
+
+const isAdvancedStudent = (semester) => {
+  const s = String(semester || "").toLowerCase();
+
+  return (
+    s.includes("חמישי") ||
+    s.includes("שישי") ||
+    s.includes("שביעי") ||
+    s.includes("שמיני") ||
+    s.includes("5th") ||
+    s.includes("6th") ||
+    s.includes("7th") ||
+    s.includes("8th")
+  );
+};
+
+const filteredRows = rows.filter((r) => {
+  const anonOk =
+    !anonIdFilter.trim() ||
+    r.anonId?.toLowerCase().includes(anonIdFilter.trim().toLowerCase());
+
+  const semester = r.demographics?.semester || "";
+
+  const semesterOk =
+    semesterFilter === "all" ||
+    (semesterFilter === "firstYear" && isFirstYearStudent(semester)) ||
+    (semesterFilter === "advanced" && isAdvancedStudent(semester));
+
+  return anonOk && semesterOk;
+});
   return (
     <div
       dir={isRTL ? "rtl" : "ltr"}
@@ -305,8 +351,7 @@ const confirmDelete = async () => {
 
               {/* Filters */}
               <div className={`rounded-lg p-4 mb-6 ${isDark ? "bg-slate-800/60" : "bg-white/70"}`}>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {/* Date */}
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">                  {/* Date */}
                   <div className="flex flex-col gap-1">
                     <label className={`text-sm ${isDark ? "text-gray-200" : "text-slate-700"}`}>
                       {t("filters.assignedDate")}
@@ -322,7 +367,44 @@ const confirmDelete = async () => {
                       }`}
                     />
                   </div>
+{/* Semester Type */}
+<div className="flex flex-col gap-1">
+  <label className={`text-sm ${isDark ? "text-gray-200" : "text-slate-700"}`}>
+    {lang === "he" ? "סינון לפי שנה" : "Filter by year"}
+  </label>
+  <select
+    value={semesterFilter}
+    onChange={(e) => setSemesterFilter(e.target.value)}
+    className={`w-full rounded px-3 py-2 outline-none text-sm ${
+      isDark
+        ? "bg-slate-900 text-white border border-slate-700"
+        : "bg-white text-slate-900 border border-slate-300"
+    }`}
+  >
+    <option value="all">{lang === "he" ? "כל הסטודנטים" : "All students"}</option>
+    <option value="firstYear">{lang === "he" ? "סטודנטים שנה ראשונה" : "First-year students"}</option>
+    <option value="advanced">{lang === "he" ? "סטודנטים מתקדמים" : "Advanced students"}</option>
+  </select>
+</div>
 
+{/* ANON ID */}
+<div className="flex flex-col gap-1">
+  <label className={`text-sm ${isDark ? "text-gray-200" : "text-slate-700"}`}>
+    ANON ID
+  </label>
+  <input
+    type="text"
+    value={anonIdFilter}
+    onChange={(e) => setAnonIdFilter(e.target.value)}
+    placeholder={lang === "he" ? "חיפוש לפי ANON ID" : "Search by ANON ID"}
+    dir="ltr"
+    className={`w-full rounded px-3 py-2 outline-none text-sm ${
+      isDark
+        ? "bg-slate-900 text-white border border-slate-700"
+        : "bg-white text-slate-900 border border-slate-300"
+    }`}
+  />
+</div>
                   {/* Group */}
                   <div className="flex flex-col gap-1">
                     <label className={`text-sm ${isDark ? "text-gray-200" : "text-slate-700"}`}>
@@ -368,7 +450,7 @@ const confirmDelete = async () => {
                 </div>
               ) : error ? (
                 <div className="text-red-400">{error}</div>
-              ) : rows.length === 0 ? (
+              ) : filteredRows.length === 0 ? (
                 <div className={`${isDark ? "text-gray-300" : "text-slate-600"}`}>
                   {t("states.empty")}
                 </div>
@@ -376,7 +458,7 @@ const confirmDelete = async () => {
                 <>
                   {/* ── Mobile cards (< md) ── */}
                   <div className="flex flex-col gap-3 md:hidden">
-                    {rows.map((r, index) => (
+                    {filteredRows.map((r, index) => (
     <MobileRow
   key={r.anonId}
   r={r}
@@ -415,7 +497,7 @@ const confirmDelete = async () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {rows.map((r, index) => (
+                        {filteredRows.map((r, index) => (
                           <tr
                             key={r.anonId}
                             className={`border-t ${
