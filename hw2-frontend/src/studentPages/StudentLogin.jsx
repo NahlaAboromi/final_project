@@ -20,6 +20,8 @@ import {
   BarChart3,
   TrendingUp,
   Bot,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 
 const LoginPage = () => {
@@ -31,6 +33,10 @@ const LoginPage = () => {
   const { t, dir, lang, ready } = useI18n("studentLogin");
   const isHebrew = lang === "he";
 
+  // Mobile accordion toggles
+  const [showCasel, setShowCasel] = useState(false);
+  const [showFeatures, setShowFeatures] = useState(false);
+
   const pageText = {
     systemDescription: isHebrew
       ? "מערכת חכמה ללמידה דרך סימולציות, משוב אישי, ניתוח CASEL וצ'אט AI תומך."
@@ -40,7 +46,7 @@ const LoginPage = () => {
       ? "כל סימולציה עוזרת לך להבין את עצמך טוב יותר."
       : "Every simulation helps you understand yourself better.",
 
-caselTitle: isHebrew ? "מודל CASEL" : "CASEL Framework",
+    caselTitle: isHebrew ? "מודל CASEL" : "CASEL Framework",
     caselItems: isHebrew
       ? [
           { Icon: Brain, title: "מודעות עצמית", desc: "זיהוי רגשות וחוזקות" },
@@ -73,9 +79,19 @@ caselTitle: isHebrew ? "מודל CASEL" : "CASEL Framework",
         ],
 
     stepsTitle: isHebrew ? "איך זה עובד?" : "How It Works",
-stepsItems: isHebrew
-  ? ["התחבר לחשבון הסטודנט", "בחר כיתה מהרשימה", "בצע סימולציה", "צפה בדוח ובמשוב"]
-  : ["Log in to your student account", "Choose a class from the list", "Complete a simulation", "View your report and feedback"],
+    stepsItems: isHebrew
+      ? [
+          { num: 1, text: "התחבר לחשבון הסטודנט" },
+          { num: 2, text: "בחר כיתה מהרשימה" },
+          { num: 3, text: "בצע סימולציה" },
+          { num: 4, text: "צפה בדוח ובמשוב" },
+        ]
+      : [
+          { num: 1, text: "Log in to your student account" },
+          { num: 2, text: "Choose a class from the list" },
+          { num: 3, text: "Complete a simulation" },
+          { num: 4, text: "View your report and feedback" },
+        ],
   };
 
   const [form, setForm] = useState({ id: "", password: "" });
@@ -109,15 +125,17 @@ stepsItems: isHebrew
         const errorData = await response.json().catch(() => ({}));
         setError(errorData.message || t("errors.loginFailed"));
       }
-    } catch (error) {
-      console.error("❌ Login error:", error);
+    } catch (err) {
+      console.error("❌ Login error:", err);
       setError(t("errors.loginError"));
     } finally {
       setIsLoading(false);
     }
   };
 
-  const iconClass = "inline w-3.5 h-3.5 mx-1 opacity-80";
+  const card = `${isDark ? "bg-slate-800" : "bg-white"} rounded-2xl shadow-md p-5`;
+  const iconBoxBlue = `w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${isDark ? "bg-slate-600" : "bg-blue-50"}`;
+  const iconBoxPurple = `w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${isDark ? "bg-slate-600" : "bg-purple-50"}`;
 
   return (
     <div
@@ -127,54 +145,105 @@ stepsItems: isHebrew
         isDark ? "bg-slate-900 text-white" : "bg-gray-50 text-slate-900"
       }`}
     >
-      <div className="px-4 mt-4">
+      {/* ── Header ── */}
+      <div className="px-4 sm:px-6 pt-4 pb-2 shrink-0">
         <SharedHeader />
       </div>
 
-      <main className="flex-1 w-full px-2 py-2 overflow-x-hidden">
-        <div className={`min-h-[calc(100vh-140px)] rounded-xl p-3 ${isDark ? "bg-slate-700" : "bg-slate-100"}`}>
-          <div className="w-full max-w-[1120px] mx-auto grid grid-cols-1 lg:grid-cols-[0.8fr_0.85fr_0.8fr] gap-3 items-start">
-            <aside className={`space-y-3 ${dir === "rtl" ? "order-3" : "order-1"}`}>
-              <div className={`${isDark ? "bg-slate-800" : "bg-white"} p-3 rounded-xl shadow-lg`}>
-                <h3 className="text-base font-semibold mb-1">Casely</h3>
-                <p className="text-xs leading-5 opacity-80">{pageText.systemDescription}</p>
+      {/* ── Main ── */}
+      <main className="flex-1 flex flex-col w-full px-3 sm:px-4 pb-4 overflow-x-hidden">
+        <div
+          className={`flex-1 flex flex-col rounded-2xl p-3 sm:p-4 ${
+            isDark ? "bg-slate-700" : "bg-slate-100"
+          }`}
+        >
+          <div
+            className="
+              flex-1 w-full max-w-[1200px] mx-auto
+              grid grid-cols-1 lg:grid-cols-[1fr_1.1fr_1fr]
+              gap-4 lg:gap-5
+              lg:items-stretch
+            "
+          >
+
+            {/* ══ LEFT aside ══ */}
+            <aside className={`flex flex-col gap-3 lg:gap-4 ${dir === "rtl" ? "lg:order-3" : "lg:order-1"}`}>
+
+              {/* Casely intro — always visible */}
+              <div className={card}>
+                <h3 className="text-base lg:text-lg font-bold mb-1 lg:mb-2">
+  {isHebrew ? "קייסלי" : "Casely"}
+</h3>
+                <p className="text-sm leading-6 opacity-75">{pageText.systemDescription}</p>
               </div>
 
-              <div className={`${isDark ? "bg-slate-800" : "bg-white"} p-2 rounded-lg shadow-lg`}>
-                <h4 className="text-xs font-medium opacity-70 mb-1">{pageText.caselTitle}</h4>
+              {/* CASEL — accordion on mobile, always open on desktop */}
+              <div className={`${card} lg:flex-1 lg:flex lg:flex-col`}>
+                <button
+                  type="button"
+                  onClick={() => setShowCasel((v) => !v)}
+                  className={`w-full flex items-center justify-between lg:cursor-default rounded-xl px-3 py-2 ${
+  isDark ? "bg-slate-700 text-slate-100" : "bg-slate-50 text-slate-600"
+}`}
+                >
+                  <h4 className={`text-xs font-semibold uppercase tracking-widest ${isDark ? "text-slate-200" : "text-slate-500"}`}>
+                    {pageText.caselTitle}
+                  </h4>
+                  <span className="lg:hidden opacity-40">
+                    {showCasel ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                  </span>
+                </button>
 
-                {pageText.caselItems.map(({ Icon, title, desc }) => (
-                  <div key={title} className={`mb-[2px] p-1 rounded-md ${isDark ? "bg-slate-700" : "bg-slate-100"}`}>
-                    <div className="text-xs font-medium leading-4">
-                      <Icon className={iconClass} /> {title}
+                <div className={`flex flex-col gap-2 mt-3 lg:flex-1 ${showCasel ? "flex" : "hidden lg:flex"}`}>
+                  {pageText.caselItems.map(({ Icon, title, desc }) => (
+                    <div
+                      key={title}
+                      className={`flex items-start gap-3 p-2 lg:p-3 rounded-xl ${
+                        isDark ? "bg-slate-700" : "bg-slate-50"
+                      }`}
+                    >
+                      <div className={iconBoxBlue}>
+                        <Icon className="w-4 h-4 text-blue-500" />
+                      </div>
+                      <div>
+                        <div className="text-sm font-semibold leading-5">{title}</div>
+                        <div className="text-xs opacity-55 leading-4 mt-0.5">{desc}</div>
+                      </div>
                     </div>
-                    <div className="text-[11px] opacity-70 leading-4">{desc}</div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
 
-              <div className="bg-green-500 text-white p-3 rounded-xl shadow-lg font-bold text-xs text-center">
+              {/* Green quote — always visible */}
+              <div className="bg-gradient-to-l from-green-500 to-emerald-400 text-white p-4 rounded-2xl shadow-md font-semibold text-sm text-center leading-6">
                 {pageText.greenQuote}
               </div>
             </aside>
 
-            <section className="order-2">
-              <div className={`max-w-xs mx-auto w-full space-y-2 ${isDark ? "bg-slate-800" : "bg-white"} p-4 rounded-xl shadow-xl`}>
-                <div className="flex flex-col items-center space-y-2">
+            {/* ══ CENTRE: login form ══ */}
+            <section className="lg:order-2 flex items-center justify-center w-full py-2 lg:py-0">
+              <div
+                className={`w-full max-w-sm ${
+                  isDark ? "bg-slate-800" : "bg-white"
+                } p-6 sm:p-8 rounded-2xl shadow-xl`}
+              >
+                <div className="flex flex-col items-center gap-3 mb-6">
                   <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                      isDark ? "bg-slate-700 text-white" : "bg-slate-100 text-slate-800"
+                    className={`w-14 h-14 rounded-full flex items-center justify-center ${
+                      isDark ? "bg-slate-700" : "bg-purple-50"
                     }`}
                     aria-label={t("studentAlt")}
                   >
-                    <Users className="w-6 h-6" strokeWidth={1.8} />
+                    <Users className="w-7 h-7 text-purple-500" strokeWidth={1.5} />
                   </div>
-
-                  <h2 className="text-xl font-bold text-center font-sans tracking-normal">{t("title")}</h2>
-
-                  <p className="text-xs text-center">
+                  <h2 className="text-2xl font-bold text-center">{t("title")}</h2>
+                  <p className="text-sm text-center opacity-60">
                     {t("noAccount")}{" "}
-                    <Link to="/register?role=student" className="font-medium text-blue-500 hover:text-blue-600">
+                    <Link
+                      to="/register?role=student"
+                      className="font-medium text-purple-500 hover:text-purple-600"
+                      style={{ opacity: 1 }}
+                    >
                       {t("registerNow")}
                     </Link>
                   </p>
@@ -182,32 +251,32 @@ stepsItems: isHebrew
 
                 {error && <Alert type="error" message={error} />}
 
-                <form className="space-y-2" onSubmit={handleSubmit}>
-                  <div className="space-y-2">
-                    <FormInput
-                      id="id"
-                      name="id"
-                      label={t("fields.id.label")}
-                      placeholder={t("fields.id.placeholder")}
-                      value={form.id}
-                      onChange={handleChange}
-                      required
-                    />
+                <form className="space-y-4" onSubmit={handleSubmit}>
+                  <FormInput
+                    id="id"
+                    name="id"
+                    label={t("fields.id.label")}
+                    placeholder={t("fields.id.placeholder")}
+                    value={form.id}
+                    onChange={handleChange}
+                    required
+                  />
+                  <FormInput
+                    id="password"
+                    name="password"
+                    type="password"
+                    label={t("fields.password.label")}
+                    placeholder={t("fields.password.placeholder")}
+                    value={form.password}
+                    onChange={handleChange}
+                    required
+                  />
 
-                    <FormInput
-                      id="password"
-                      name="password"
-                      type="password"
-                      label={t("fields.password.label")}
-                      placeholder={t("fields.password.placeholder")}
-                      value={form.password}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-
-                  <div className="text-xs mb-1">
-                    <Link to="/forgot-password?role=student" className="font-medium text-blue-500 hover:text-blue-600">
+                  <div className="flex justify-start">
+                    <Link
+                      to="/forgot-password?role=student"
+                      className="text-xs text-purple-500 hover:underline font-medium"
+                    >
                       {t("forgotPassword")}
                     </Link>
                   </div>
@@ -219,46 +288,71 @@ stepsItems: isHebrew
               </div>
             </section>
 
-            <aside className={`space-y-3 ${dir === "rtl" ? "order-1" : "order-3"}`}>
-              <div className={`${isDark ? "bg-slate-800" : "bg-white"} p-3 rounded-xl shadow-lg`}>
-                <h3 className="text-xs font-bold mb-1 opacity-80">{pageText.featuresTitle}</h3>
+            {/* ══ RIGHT aside ══ */}
+            <aside className={`flex flex-col gap-3 lg:gap-4 ${dir === "rtl" ? "lg:order-1" : "lg:order-3"}`}>
 
-                {pageText.featuresItems.map(({ Icon, title, desc }) => (
-                  <div key={title} className="mb-1">
-                    <div className="text-xs font-medium leading-4">
-                      <Icon className={iconClass} /> {title}
+              {/* Features — accordion on mobile, always open on desktop */}
+              <div className={`${card} lg:flex-1 lg:flex lg:flex-col`}>
+                <button
+                  type="button"
+                  onClick={() => setShowFeatures((v) => !v)}
+                  className={`w-full flex items-center justify-between lg:cursor-default rounded-xl px-3 py-2 ${
+                    isDark ? "bg-slate-700 text-slate-100" : "bg-slate-50 text-slate-600"
+                  }`}
+                >
+                  <h4 className={`text-xs font-semibold uppercase tracking-widest ${isDark ? "text-slate-200" : "text-slate-500"}`}>
+                    {pageText.featuresTitle}
+                  </h4>
+                  <span className="lg:hidden opacity-40">
+                    {showFeatures ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                  </span>
+                </button>
+
+                <div className={`flex flex-col gap-3 mt-3 lg:flex-1 ${showFeatures ? "flex" : "hidden lg:flex"}`}>
+                  {pageText.featuresItems.map(({ Icon, title, desc }) => (
+                    <div key={title} className="flex items-start gap-3">
+                      <div className={iconBoxPurple}>
+                        <Icon className="w-4 h-4 text-purple-500" />
+                      </div>
+                      <div>
+                        <div className="text-sm font-semibold leading-5">{title}</div>
+                        <div className="text-xs opacity-55 leading-4 mt-0.5">{desc}</div>
+                      </div>
                     </div>
-                    <div className="text-[11px] opacity-70 leading-4">{desc}</div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
 
-              <div className={`${isDark ? "bg-slate-800" : "bg-white"} p-3 rounded-xl shadow-lg`}>
-                <h3 className="text-xs font-bold mb-1 opacity-80">{pageText.stepsTitle}</h3>
-
-                {pageText.stepsItems.map((step, index) => (
-                  <div key={step} className="flex items-center gap-3 mb-1">
-                    <span className="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px]">
-                      {index + 1}
-                    </span>
-                    <span className="text-[11px]">{step}</span>
-                  </div>
-                ))}
+              {/* Steps — always visible */}
+              <div className={card}>
+                <h4 className="text-xs font-semibold opacity-50 mb-4 uppercase tracking-widest">
+                  {pageText.stepsTitle}
+                </h4>
+                <div className="flex flex-col gap-3">
+                  {pageText.stepsItems.map(({ num, text }) => (
+                    <div key={num} className="flex items-center gap-3">
+                      <span className="w-7 h-7 rounded-full bg-purple-600 text-white flex items-center justify-center text-xs font-bold shrink-0">
+                        {num}
+                      </span>
+                      <span className="text-sm">{text}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
+
             </aside>
+
           </div>
         </div>
       </main>
 
-      <div className="px-4 pb-4">
+      {/* ── Footer ── */}
+      <div className="px-4 sm:px-6 pb-4 shrink-0">
         <Footer />
       </div>
     </div>
   );
 };
 
-const StudentLoginPage = () => {
-  return <LoginPage />;
-};
-
+const StudentLoginPage = () => <LoginPage />;
 export default StudentLoginPage;
