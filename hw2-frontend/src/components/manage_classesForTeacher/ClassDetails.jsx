@@ -140,12 +140,17 @@ const ClassDetailsContent = () => {
               </div>
             </>
           ) : (
-            <p className="text-sm">{t('loading')}</p>
-          )}
+<div className="flex flex-col items-center justify-center py-20">
+  <div className="w-12 h-12 border-4 border-gray-300 border-t-blue-600 rounded-full animate-spin"></div>
+ <div
+  className="mt-4 text-sm"
+  dir={lang === 'he' ? 'rtl' : 'ltr'}
+>
+  {t('loading')}
+</div>
+</div>          )}
 
-          <div className="px-0 pt-6">
-            <Footer />
-          </div>
+
         </main>
 
         {/* Sticky AI Chat Sidebar */}
@@ -165,7 +170,10 @@ const ClassDetailsContent = () => {
           />
         </aside>
       </div>
-
+{/* Footer */}
+<div className="mt-auto px-4 pb-4">
+  <Footer />
+</div>
       {/* Mobile: floating AIChat button */}
       {user?.id && (
         <div className="lg:hidden">
