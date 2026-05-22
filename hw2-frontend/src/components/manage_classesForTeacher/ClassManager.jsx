@@ -46,6 +46,7 @@ const ClassManagerContent = () => {
             subject: item.subject || '',
             createdAt: item.createdAt || item.createdDate || '',
             studentsTaken: item.students || [],
+learningClusters: item.learningClusters || [],
           }));
           setClasses(formattedData);
           setError('');
@@ -137,7 +138,13 @@ className={`h-4 w-4 sm:h-5 sm:w-5 absolute ${lang === 'he' ? 'left-3' : 'right-3
           {/* Classes List - רספונסיבי */}
           <div className="grid grid-cols-1 gap-4 sm:gap-6">
             {loading ? (
-              <div className="text-center py-8 sm:py-10 text-sm sm:text-base">{t('loading')}</div>
+              <div className="flex flex-col items-center justify-center py-16">
+  <div className="w-12 h-12 border-4 border-gray-300 border-t-blue-600 rounded-full animate-spin"></div>
+
+  <div className="mt-4 text-sm sm:text-base">
+    {t('loading')}
+  </div>
+</div>
             ) : error ? (
               <div className="bg-red-100 dark:bg-red-500 p-4 sm:p-5 rounded text-center text-sm sm:text-base">
                 <p>{t('errorBox')}<br />{error}</p>

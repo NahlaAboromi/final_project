@@ -41,7 +41,8 @@ const ClassCard = ({ classData, onDeleteSuccess }) => {
 
   // Get the list of students (or empty array if missing)
   const students = classData.studentsTaken || [];
-
+const learningClusters = classData.learningClusters || [];
+const hasLearningClusters = learningClusters.length > 0;
   // Filter only students who have a valid overallScore
   const studentsWithScores = students.filter(
     (student) => student.analysisResult && typeof student.analysisResult.overallScore === 'number'
@@ -212,12 +213,25 @@ const ClassCard = ({ classData, onDeleteSuccess }) => {
               {t('actions.view')}
             </button>
           </Link>
+<Link
+  to={`/teacher/class/${encodeURIComponent(classData.classCode)}/sel-groups`}
+  className="flex-1 sm:flex-none"
+>
+  <button className="w-full sm:w-auto bg-purple-600 hover:bg-purple-700 text-white py-2 sm:py-1 px-4 sm:px-3 rounded text-sm">
+{isRTL
+  ? 'ניתוח קשיים ויצירת תתי־קבוצות'
+  : 'Difficulty Analysis & Subgroup Creation'}  </button>
+</Link>
 
-          <Link to={`/teacher/class/${encodeURIComponent(classData.classCode)}/reports`} className="flex-1 sm:flex-none">
-            <button className="w-full sm:w-auto bg-purple-600 hover:bg-purple-700 text-white py-2 sm:py-1 px-4 sm:px-3 rounded text-sm">
-              {t('actions.reports')}
-            </button>
-          </Link>
+{hasLearningClusters && (
+  <Link
+    to={`/teacher/class/${encodeURIComponent(classData.classCode)}/learning-clusters`}
+    className="flex-1 sm:flex-none"
+  >
+    <button className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white py-2 sm:py-1 px-4 sm:px-3 rounded text-sm">
+{isRTL ? 'קבוצות חיזוק SEL' : 'SEL Reinforcement Groups'}    </button>
+  </Link>
+)}
 
           <button
             className="w-full sm:w-auto bg-red-500 hover:bg-red-600 text-white py-2 sm:py-1 px-4 sm:px-3 rounded text-sm"

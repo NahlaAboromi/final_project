@@ -5,7 +5,7 @@ import { useNotifications } from '../context/NotificationsContext';
 import { LanguageContext } from '../context/LanguageContext';
 import { useI18n } from '../utils/i18n';
 
-const ClassForm = () => {
+const ClassForm = ({ studentRoster = [], onClassCreated }) => {
   const { user } = useContext(UserContext);
   const { fetchNotifications } = useNotifications();
   const { lang } = useContext(LanguageContext) || { lang: 'he' };
@@ -165,17 +165,28 @@ const language = lang === 'he' ? 'he' : 'en';
 const selectedTopicLabel = formData.useCustomTopic
   ? formData.customTopic.trim()
   : t(`topics.${additionalTopics.find(opt => opt.value === formData.topic)?.dictKey}`);
+  if (!studentRoster.length) {
+  showErrorToast(
+    isRTL
+      ? 'יש להעלות קובץ Excel עם רשימת סטודנטים לפני יצירת הכיתה.'
+      : 'Please upload an Excel file with the student roster before creating the class.'
+  );
+  setIsLoading(false);
+  setLoadingAction('');
+  return;
+}
       const classResponse = await fetch('/api/classes/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          classCode,
-          className,
-subject: selectedTopicLabel,
-          situation,
-          question,
-          createdBy: user.id,
-        }),
+body: JSON.stringify({
+  classCode,
+  className,
+  subject: selectedTopicLabel,
+  situation,
+  question,
+  createdBy: user.id,
+  studentRoster,
+}),
       });
 
       const classData = await classResponse.json();
@@ -202,6 +213,7 @@ subject: selectedTopicLabel,
       await fetchNotifications();
       showSuccessToast(t('toasts.classCreated'));
       resetForm();
+      onClassCreated?.();
     } catch (error) {
       console.error('❌ Error creating class:', error);
 const rawMessage = error.message || '';

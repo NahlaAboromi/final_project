@@ -8,6 +8,7 @@ import ClassCard from './components/manage_classesForTeacher/ClassCard.jsx';
 import ViewClasses from './components/manage_classesForTeacher/ViewClasses.jsx';
 import ClassDetails from './components/manage_classesForTeacher/ClassDetails.jsx'; 
 import ClassStudentReports from './components/manage_classesForTeacher/ClassStudentReports.jsx'; 
+import ClassSELGroupsDashboard from './components/lecturerEnhancements/ClassSELGroupsDashboard.jsx';
 import LoginPage from './components/teacherLoginRegister/LoginPage.jsx';
 import RegisterPage from "./components/teacherLoginRegister/RegisterPage";
 import ForgotPassword from "./components/teacherLoginRegister/ForgotPassword";
@@ -44,6 +45,10 @@ import AdminLogin from "./admin/AdminLogin.jsx";
 import AdminHome from "./admin/AdminHome";
 import AdminSessions from "./admin/AdminSessions";
 import AdminResults from "./admin/AdminResults";
+import SkillSuggestions from './studentPages/SkillSuggestions';
+import SkillSuggestionSimulation from './studentPages/SkillSuggestionSimulation';
+import SkillSuggestionResult from './studentPages/SkillSuggestionResult';
+import LearningClustersTracking from './components/manage_classesForTeacher/LearningClustersTracking';
 function App() {
   return (
     <LanguageProvider>
@@ -73,7 +78,11 @@ function App() {
                 {/* ✅ חדשים לכפתורים */}                {/* ✅ חדשים לכפתורים */}
                 <Route path="/teacher/class/:classCode" element={<ClassDetails />} />
                 <Route path="/teacher/class/:classCode/reports" element={<ClassStudentReports />} />
-              
+              <Route
+  path="/teacher/class/:classCode/sel-groups"
+  element={<ClassSELGroupsDashboard />}
+/>
+<Route path="/skill-suggestion-result" element={<SkillSuggestionResult />} />
                 {/* לסטודנט */}
                 <Route path="/StudentHome" element={<StudentHome />} />
                 <Route path="/student-login" element={<StudentLoginPage />} />
@@ -83,6 +92,7 @@ function App() {
                 <Route path="/my-reports" element={<MyReports />} />
                 <Route path="/simulation_result" element={<SimulationResult />} />
                 <Route path="/my_progress" element={<MyProgress />} />
+               <Route path="/skill-suggestions" element={<SkillSuggestions />} />
                 <Route path="/verify-code" element={<VerifyCode />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
 
@@ -94,7 +104,11 @@ function App() {
     </AnonymousStudentProvider>
   }
 />
-
+<Route
+  path="/teacher/class/:classCode/learning-clusters"
+  element={<LearningClustersTracking />}
+/>
+<Route path="/skill-suggestion-simulation" element={<SkillSuggestionSimulation />} />
 <Route
   path="/simulation/:scenarioId"
   element={

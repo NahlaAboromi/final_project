@@ -19,12 +19,19 @@ Question: "${question}"
 Student Analyses:
 ${joinedSummaries}
 
-Please summarize:
-- The class's overall strengths and weaknesses.
-- Which competencies are strongest and weakest.
-- Provide a short recommendation to the teacher.
+Please respond with ONLY 2 very short sentences.
 
-Respond in the same language as the Situation and Question. If they are in Hebrew, respond in Hebrew. If they are in English, respond in English. Use 3–5 sentences only.`
+First sentence:
+Give one short general insight about the class overall SEL state.
+
+Second sentence:
+Give one short practical recommendation for the teacher.
+
+Put ONE empty line between the first sentence and the recommendation.
+
+Respond in the same language as the Situation and Question. If they are in Hebrew, respond in Hebrew. If they are in English, respond in English.
+
+Keep the response short, natural, conversational, and suitable as the opening message of an AI chat with the teacher.`
     }
   ];
   // Call Claude service to generate the class insight

@@ -32,7 +32,9 @@ const ClassManagerContent = () => {
           return;
         }
 
-        const response = await fetch(`/api/classes/get-all-classes`);
+        const response = await fetch(
+  `/api/classes/student-classes/${user.id}`
+);
         const data = await response.json();
 
         if (response.ok) {

@@ -24,7 +24,7 @@
   },
   "actions": {
     "view": "View Details",
-    "reports": "Student Reports",
+    "reports": "Student Difficulty Analysis",
     "delete": "Delete"
   },
   "modal": {
