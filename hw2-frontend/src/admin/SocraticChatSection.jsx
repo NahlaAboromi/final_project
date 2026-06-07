@@ -38,12 +38,12 @@ const SocraticChatSection = ({
 
   const finalReflectionQuestions = useMemo(() => {
 const he = {
-  insight: "באיזה אופן השיחה הסוקרטית עזרה לך להרהר במחשבות או ברגשות שלך?",
+  insight: "כיצד היית מסכם/ת את חוויית ההתנסות במערכת בפעם הקודמת ובפעם הזאת?",
   usefulness: "בסך הכל, האם את/ה מרגיש/ה שהשיחה עם Casely הייתה מועילה או משמעותית עבורך?",
 };
 
 const en = {
-  insight: "In what way did the Socratic conversation help you reflect on your thoughts or feelings?",
+  insight: "How would you summarize your experience using the system both the first time and this time?",
   usefulness: "Overall, do you feel that talking with Casely was useful or meaningful to you?",
 };
     return participantLang === "he" ? he : en;
