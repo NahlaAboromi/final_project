@@ -16,7 +16,28 @@ import { LanguageContext } from "../context/LanguageContext";
 import { useI18n } from "../utils/i18n";
 
 const SCALE_VALUES = [1, 2, 3, 4, 5, 6, 7];
-
+const UEQ_ITEMS = {
+  en: [
+    { key: "ueqs01", order: 1, category: "Pragmatic Quality", text: "obstructive / supportive" },
+    { key: "ueqs02", order: 2, category: "Pragmatic Quality", text: "complicated / easy" },
+    { key: "ueqs03", order: 3, category: "Pragmatic Quality", text: "inefficient / efficient" },
+    { key: "ueqs04", order: 4, category: "Pragmatic Quality", text: "confusing / clear" },
+    { key: "ueqs05", order: 5, category: "Hedonic Quality", text: "boring / exciting" },
+    { key: "ueqs06", order: 6, category: "Hedonic Quality", text: "not interesting / interesting" },
+    { key: "ueqs07", order: 7, category: "Hedonic Quality", text: "conventional / inventive" },
+    { key: "ueqs08", order: 8, category: "Hedonic Quality", text: "usual / leading-edge" },
+  ],
+  he: [
+    { key: "ueqs01", order: 1, category: "Pragmatic Quality", text: "מכשילות / תומכות" },
+    { key: "ueqs02", order: 2, category: "Pragmatic Quality", text: "מסובכים / קלים" },
+    { key: "ueqs03", order: 3, category: "Pragmatic Quality", text: "לא יעיל / יעיל" },
+    { key: "ueqs04", order: 4, category: "Pragmatic Quality", text: "מבלבלים / ברורים" },
+    { key: "ueqs05", order: 5, category: "Hedonic Quality", text: "משעממים / מלהיבים" },
+    { key: "ueqs06", order: 6, category: "Hedonic Quality", text: "לא מעניינים / מעניינים" },
+    { key: "ueqs07", order: 7, category: "Hedonic Quality", text: "שגרתיים / פורצי דרך" },
+    { key: "ueqs08", order: 8, category: "Hedonic Quality", text: "רגילים / בחזית החדשנות" },
+  ],
+};
 function UeqQuestionnaireContent() {
   const navigate = useNavigate();
   const { theme } = useContext(ThemeContext);
@@ -77,45 +98,43 @@ const howToBtnLabel   = lang === "he" ? "איך לענות?" : "How to answer?";
 const howToTitle      = lang === "he" ? "איך לענות על השאלון" : "How to answer the questionnaire";
 
 const howToOkLabel    = lang === "he" ? "הבנתי" : "Got it";
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem(UEQ_CACHE_KEY);
-      if (!raw) {
-        console.warn("UEQ-S not found in localStorage for key:", UEQ_CACHE_KEY);
-        setItems([]);
-        setError(
-          t("err_load") ||
-            "לא נמצאו פריטי שאלון חוויית משתמש (UEQ-S) בזיכרון המקומי."
-        );
-        return;
-      }
+useEffect(() => {
+  const fallbackItems = lang === "he" ? UEQ_ITEMS.he : UEQ_ITEMS.en;
 
-      const parsed = JSON.parse(raw);
-
-      if (!Array.isArray(parsed)) {
-        console.warn("UEQ-S format is not an array:", parsed);
-        setItems([]);
-        setError(
-          t("err_load") ||
-            "פורמט השאלון ב-localStorage אינו תקין."
-        );
-        return;
-      }
-
-      const sorted = [...parsed].sort(
-        (a, b) => (a.order || 0) - (b.order || 0)
-      );
-      setItems(sorted);
+  try {
+    const raw = localStorage.getItem(UEQ_CACHE_KEY);
+    //const raw = localStorage.getItem(UEQ_CACHE_KEY + "_TEST_FAIL");
+    if (!raw) {
+      console.warn("UEQ-S not found in localStorage. Using hardcoded fallback.");
+      setItems(fallbackItems);
       setError("");
-    } catch (e) {
-      console.warn("UEQ-S parse error:", e);
-      setItems([]);
-      setError(
-        t("err_load") ||
-          "אירעה שגיאה בקריאת השאלון מהזיכרון המקומי."
-      );
+      setResponses({});
+      return;
     }
-  }, [UEQ_CACHE_KEY]);
+
+    const parsed = JSON.parse(raw);
+
+    if (!Array.isArray(parsed) || parsed.length !== 8) {
+      console.warn("UEQ-S localStorage invalid. Using hardcoded fallback.");
+      setItems(fallbackItems);
+      setError("");
+      setResponses({});
+      return;
+    }
+
+    const sorted = [...parsed].sort((a, b) => (a.order || 0) - (b.order || 0));
+
+    console.log("UEQ-S loaded from localStorage:", UEQ_CACHE_KEY);
+    setItems(sorted);
+    setError("");
+    setResponses({});
+  } catch (e) {
+    console.warn("UEQ-S parse error. Using hardcoded fallback.", e);
+    setItems(fallbackItems);
+    setError("");
+    setResponses({});
+  }
+}, [UEQ_CACHE_KEY, lang]);
 
   const answeredCount = useMemo(
     () => Object.keys(responses).length,
